@@ -1,10 +1,13 @@
 const express = require('express'); //framework qui permet de coder plus rapidement. 
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
+const path = require('path'); //accéder au path de notre serveur :
 require('dotenv').config({ path: './config/.env' });
+const requireAuth = require('./middleware/requireAuth');
 require('./config/db');
 const cors = require('cors');
 const app = express();
+var bodyParser = require('body-parser');
 app.use(express.json());
 
 
@@ -15,9 +18,13 @@ app.use((req, res, next) => {
     next();
 });
 
+app.post('/jwtid', requireAuth, (req, res) => {
+    console.log('requireauth marche');
+});
 //routes
 app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images'))); //Cela indique à Express qu'il faut gérer la ressource images de manière statique (un sous-répertoire de notre répertoire de base, __dirname) à chaque fois qu'elle reçoit une requête vers la route /images. 
 
 
 

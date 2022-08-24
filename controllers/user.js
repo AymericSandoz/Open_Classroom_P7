@@ -40,7 +40,7 @@ exports.login = (req, res, next) => {
                     res.status(200).json({
                         userId: user._id,
                         token: jwt.sign({ userId: user._id },
-                            'rbircrihruihruidrnhr', { expiresIn: '24h' }
+                            'rbircrihruihruidrnhr', { expiresIn: '12h' }
                         )
                     });
                 })
@@ -83,3 +83,11 @@ exports.login = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error }));
 };*/
+
+
+//useless
+exports.logout = (req, res, next) => {
+    console.log("déconnexion");
+    res.status(200).json('Deconnected !');
+    window.location.href('http://localhost:3000/Connexion')
+};

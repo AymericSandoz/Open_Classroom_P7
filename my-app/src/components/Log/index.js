@@ -42,16 +42,16 @@ const Log = (props) => {
                         Se connecter
                     </li>
                 </ul>
-                {signUpModal && <SignUpForm />}  {/*QUestion mentor : Pourquoi <signUpForm/> ne marche pas ?  */}
+                {signUpModal && <SignUpForm />}
                 {signInModal && <SignInForm />}
 
 
                 {/*}
 //QUestion mentor pourquoi ça ne marche pas ??? 
                 if({signUpModal})
-                {<li>signUpForm()</li>};
+                {<li><SignUpForm /></li>};
                 if({signInModal})
-                {<li>signUpForm()</li>};
+                {<SignInForm />};
 */}
 
             </div>
