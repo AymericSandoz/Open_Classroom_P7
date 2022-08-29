@@ -7,6 +7,6 @@ const userCtrl = require('../controllers/user');
 //Routes
 router.post('/register', userCtrl.signup); //Inscriptions
 router.post('/login', userCtrl.login); //COnnexion
-router.post('/logout', userCtrl.logout); //COnnexion
+router.post('/logout', userCtrl.logout);
 
 module.exports = router; //exportations de notre routeur

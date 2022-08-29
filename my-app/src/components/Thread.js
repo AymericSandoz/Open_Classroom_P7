@@ -1,32 +1,45 @@
 
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getPosts } from "../actions/post.actions";
-import { isEmpty } from "./Utils";
+import Card from "./Card";
+
+import axios from "axios";
 
 const Thread = () => {
     const [loadPost, setLoadPost] = useState(true);
-    const dispatch = useDispatch();
+    const [posts, setPosts] = useState([]);
 
-    const posts = useSelector((state) => state.postReducer);/////pourquoi ça ne marche pas ? 
-    console.log(posts[0]);
+
+
+
     useEffect(() => {
         if (loadPost) {
-            dispatch(getPosts());
-            setLoadPost(false);
+            const getPosts = async () => {
+                await axios
+                    .get('http://localhost:5000/api/post/')
+                    .then((res) => {
+
+                        setPosts(res.data);
+
+                        setLoadPost(false);
+                    })
+                    .catch((err) => console.log('requête axios de post actions ne fonctionne pas' + err));
+            };
+            getPosts();
         }
     },
-        [loadPost, dispatch])
+        [loadPost, posts])
 
 
     return (
-        <div className="thread-container">
-            <ul>
-                {posts[0].isEmpty() !== 0 &&//Pourquoi IF(){} ne marche pas ? 
-                    posts.map((post) => {
-                        return <li> {post._id} </li>;
-                    })}
-            </ul>
+        <div>
+            <div className="thread-container">
+                <ul>
+                    {posts.length > 0 &&
+                        posts.map((post) => {
+                            return <Card post={post} key={post._id} />;
+                        })}
+                </ul>
+            </div>
         </div>
     );
 };
