@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LikeButton from './Post/LikeButton';
-
-
+import axios from 'axios';
+import { UidContext } from "./AppContext";
+import DeleteCard from './Post/DeleteCard';
+import CardComments from './Post/CardComments';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-solid-svg-icons'
 const dateParser = (num) => {
     let options = {
         hour: "2-digit",
@@ -22,12 +26,38 @@ const dateParser = (num) => {
 
 const Card = ({ post }) => {
     const [isLoading, setIsLoading] = useState(true);
-    console.log('post dans card :' + post);
+    const [isUpdated, setIsUpdated] = useState(false);
+    const [textUpdate, setTextUpdate] = useState(null);
+    const [showComments, setShowComments] = useState(false);
+    const uid = useContext(UidContext);
+
+    const updatePost = async (postId, description) => {
+
+        await axios({
+            method: "put",
+            url: `http://localhost:5000/api/post/${postId}`,
+            data: { description },
+            headers: { "authorization": `Bearer ${localStorage.getItem('token')}` }
+        })
+            .then((res) => {
+                console.log(textUpdate);
+                setTextUpdate(textUpdate);///NE MARCHE PAS 
+
+            })
+            .catch((err) => console.log(err));
+
+    };
+    const updateItem = () => {
+
+        if (textUpdate) {
+            updatePost(post._id, textUpdate);
+        }
+        setIsUpdated(false);
+    };
 
     useEffect(() => {
+
         setIsLoading(false);
-        console.log(post.lentgh);
-        console.log('isLoading:' + isLoading);
     }, [post]);
 
     return (
@@ -47,9 +77,20 @@ const Card = ({ post }) => {
                             <span>{dateParser(post.createdAt)}</span>
                         </div>
                     </div>
-                    <div className="description">
-                        {post.description}
-                    </div>
+                    {isUpdated === false && <p>{post.description}</p>}
+                    {isUpdated && (
+                        <div className="update-post">
+                            <textarea
+                                defaultValue={post.description}
+                                onChange={(e) => setTextUpdate(e.target.value)}
+                            />
+                            <div className="button-container">
+                                <button className="btn" onClick={updateItem}>
+                                    Valider modification
+                                </button>
+                            </div>
+                        </div>
+                    )}
                     {post.image && <img className="post-image" src={post.imageUrl} alt="posted by user" />}
                     {post.video && (
                         <iframe
@@ -62,9 +103,26 @@ const Card = ({ post }) => {
                             title={post._id}
                         ></iframe>
                     )}
-                    <span>{post.comments.length}</span>
                     <LikeButton post={post} />
+                    {uid === post.userId && (
+                        <>
 
+                            <div className="button-container">
+                                <div onClick={() => setIsUpdated(!isUpdated)}>
+                                    <h4>Modifier post </h4>
+                                </div>
+
+                            </div>
+                            <DeleteCard id={post._id} />
+                        </>
+                    )}
+                    <div className="card-comment">
+                        <div className="comment-icon">
+                            <FontAwesomeIcon icon={faComment} onClick={() => setShowComments(!showComments)} />
+                            <span>{post.comments.length}</span>
+                        </div>
+                    </div>
+                    {showComments && <CardComments post={post} />}
                 </>
             )
             }</li>
