@@ -9,7 +9,7 @@ const cors = require('cors');
 const app = express();
 var bodyParser = require('body-parser');
 app.use(express.json());
-
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); //accéder à notre API depuis n'importe quelle origine ( '*' ) 

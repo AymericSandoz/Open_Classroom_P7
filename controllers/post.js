@@ -5,32 +5,32 @@ const fs = require('fs');
 
 //créer un post 
 exports.createPost = (req, res, next) => {
-    console.log("creae pos :" + req.body);
-    const postObject = req.body;
-    console.log("creae pos &");
-    delete postObject._id;
-
+    
+console.log(req.body.description);
     if (req.file == undefined) {
-        console.log(postObject);
+       
         var post = new Post({
-            ...postObject,
             userId: req.auth.userId,
+    description: req.body.description,
+    video: req.body.video,
+    email : req.body.email
 
         });
 
     }
 
     else {
-        console.log("creae pos &&&");
         var post = new Post({
-            ...postObject,
+            
+    description: req.body.description,
             userId: req.auth.userId,
+            email : req.body.email,
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         });
 
     }
 
-
+console.log(post);
     post.save()
         .then(() => { res.status(201).json({ message: 'post saved !' }) })
         .catch(error => { console.log(error); })

@@ -22,14 +22,13 @@ const NewPostForm = () => {
             data.append('video', video);
             data.append('email', userData.email);
 
-  console.log(data);
             const addPost = async (data) => {
-  console.log(data);
+  console.log('data description :'+data.description +'message' +message );
                 await axios({
                     method: "post",
                     url: 'http://localhost:5000/api/post',
                     data: { data },
-                    headers: { "authorization": `Bearer ${localStorage.getItem('token')}` }
+                    headers: {"Content-Type": "multipart/form-data", "authorization": `Bearer ${localStorage.getItem('token')}` }
 
                 })
                     .then((res) => {
