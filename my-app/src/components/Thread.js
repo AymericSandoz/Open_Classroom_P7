@@ -9,7 +9,9 @@ const Thread = () => {
     const [posts, setPosts] = useState([]);
 
 
-
+    const updatepost = () => {
+        console.log('mise à jour de ous les potss')
+    }
 
     useEffect(() => {
         if (loadPost) {
@@ -36,7 +38,7 @@ const Thread = () => {
                 <ul>
                     {posts.length > 0 &&
                         posts.map((post) => {
-                            return <Card post={post} key={post._id} />;
+                            return <Card post={post} updatepost={updatepost} key={post._id} />;
                         })}
                 </ul>
             </div>

@@ -36,7 +36,7 @@ const App = () => {
     }, [uid, dispatch]);
 
     return (
-        <UidContext.Provider value={uid}>
+        <UidContext.Provider value={uid} >
             <Routes />
         </UidContext.Provider>
     )

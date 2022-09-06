@@ -5,12 +5,13 @@ const fs = require('fs');
 
 //créer un post 
 exports.createPost = (req, res, next) => {
-
-    const postObject = JSON.parse(JSON.stringify(req.body));
-
+    console.log("creae pos :" + req.body);
+    const postObject = req.body;
+    console.log("creae pos &");
     delete postObject._id;
 
     if (req.file == undefined) {
+        console.log(postObject);
         var post = new Post({
             ...postObject,
             userId: req.auth.userId,
@@ -20,6 +21,7 @@ exports.createPost = (req, res, next) => {
     }
 
     else {
+        console.log("creae pos &&&");
         var post = new Post({
             ...postObject,
             userId: req.auth.userId,
@@ -31,7 +33,7 @@ exports.createPost = (req, res, next) => {
 
     post.save()
         .then(() => { res.status(201).json({ message: 'post saved !' }) })
-        .catch(error => { res.status(400).json({ error }) })
+        .catch(error => { console.log(error); })
 };
 
 exports.getAllPosts = (req, res, next) => {
@@ -63,7 +65,7 @@ exports.getOnePost = (req, res, next) => {
 exports.modifyPost = (req, res, next) => {
     console.log("req body str " + JSON.stringify(req.body));
     console.log("req body str " + JSON.parse(JSON.stringify(req.body)));
-
+    console.log(req.body);
 
 
     const postObject = req.file ? {
@@ -78,7 +80,7 @@ exports.modifyPost = (req, res, next) => {
                 res.status(403).json({ message: ' unauthorized request' });
             } else {
                 Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
-                    .then(() => res.status(200).json({ message: 'object modified !' }))
+                    .then(() => res.status(201).json('object modified !'))
                     .catch(error => res.status(401).json({ error }));
             }
         })
@@ -90,19 +92,31 @@ exports.modifyPost = (req, res, next) => {
 
 
 exports.deletePost = (req, res, next) => {
+    console.log(req.params.id);
     Post.findOne({ _id: req.params.id })
         .then(post => {
             if (post.userId != req.auth.userId) {
                 res.status(403).json({ message: ' unauthorized request' });
             } else {
+                console.log('etape 2 de delete post atteinte');
 
-                const filename = post.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
+                if (post.imageUrl === undefined) {
                     Post.deleteOne({ _id: req.params.id })
                         .then(() => { res.status(200).json({ message: 'Object deleted !' }) })
                         .catch(error => res.status(401).json({ error }));
+                }
 
-                });
+                else {
+                    const filename = post.imageUrl.split('/images/')[1];
+                    console.log('etape 3 de delete post atteinte');
+                    fs.unlink(`images/${filename}`, () => {
+                        console.log('etape 4 de delete post atteinte');
+                        Post.deleteOne({ _id: req.params.id })
+                            .then(() => { res.status(200).json({ message: 'Object deleted !' }) })
+                            .catch(error => res.status(401).json({ error }));
+
+                    });
+                }
             }
         })
 
@@ -131,17 +145,19 @@ exports.deletePost = (req, res, next) => {
 };*/
 
 exports.likePost = (req, res) => {
+    console.log('Like fonction lancée');
+    console.log('req.params.id' + req.params.id)
 
     Post.findByIdAndUpdate(req.params.id, {
         $addToSet: { usersLiked: req.auth.userId },
     }, { new: true },
         function (err, docs) {
             if (err) {
-                console.log(err);
+                console.log('error lors du like' + err);
                 res.status(400).json(err);
             } else {
-                console.log("req.body._id", req.auth.userId);
-                console.log("req.param.id", req.params.id);
+                console.log("req.auth._id", req.auth.userId);
+
                 console.log("Updated likes : ", docs);
                 res.send(docs);
             }
@@ -149,7 +165,7 @@ exports.likePost = (req, res) => {
 };
 
 exports.unlikePost = (req, res) => {
-
+    console.log('Unlike fonction lancée');
     Post.findByIdAndUpdate(req.params.id, {
         $pull: { usersLiked: req.auth.userId },
     }, { new: true },
@@ -158,7 +174,7 @@ exports.unlikePost = (req, res) => {
                 console.log(err);
                 res.status(400).json(err);
             } else {
-                console.log("req.body._id", req.auth.userId);
+                console.log("req.auth._id", req.auth.userId);
                 console.log("req.param.id", req.params.id);
                 console.log("Updated likes : ", docs);
                 res.send(docs);
@@ -205,6 +221,8 @@ exports.undislikePost = (req, res) => {
 };
 
 exports.commentPost = (req, res) => {
+    console.log('on entre dans comment post');
+    console.log('on entre dans comment post');
     Post.findByIdAndUpdate(
         req.params.id, {
         $push: {
@@ -231,19 +249,25 @@ exports.editCommentPost = (req, res) => {
         const theComment = docs.comments.find((comment) =>
             comment._id.equals(req.body.commentId)
         );
-
+        console.log("req.params.id : " + req.params.id);
+        console.log("req.body.commentId: " + req.body.commentId);
+        console.log("theComment: " + theComment);
         if (!theComment) return res.status(404).send("Comment not found");
         if (theComment.commenterId != req.auth.userId) return res.status(401).send("unauthorized request");
         theComment.text = req.body.text;
+        console.log(theComment.text);
+        console.log('docs:' + docs);
 
-        return docs.save((err) => {
-            if (!err) return res.status(200).send(docs);
-            return res.status(500).send(err);
-        });
+
+        return docs.save()
+            .then(() => { res.status(201).json({ message: 'post saved !' }) })
+            .catch(error => { res.status(400).send(err); })
     });
 };
 
 exports.deleteCommentPost = (req, res) => {
+    console.log('req.params.id' + req.params.id);
+    console.log('req.body.commentId:' + req.body.commentId);
 
     return Post.findByIdAndUpdate(
         req.params.id, {

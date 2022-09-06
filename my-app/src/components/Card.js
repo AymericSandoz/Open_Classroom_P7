@@ -24,12 +24,13 @@ const dateParser = (num) => {
     return date.toString();
 };
 
-const Card = ({ post }) => {
+const Card = ({ post,updatepost }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdated, setIsUpdated] = useState(false);
     const [textUpdate, setTextUpdate] = useState(null);
     const [showComments, setShowComments] = useState(false);
     const uid = useContext(UidContext);
+    const [currentpost, setcurrentpost] = useState(post);
 
     const updatePost = async (postId, description) => {
 
@@ -41,8 +42,8 @@ const Card = ({ post }) => {
         })
             .then((res) => {
                 console.log(textUpdate);
-                setTextUpdate(textUpdate);///NE MARCHE PAS 
-
+                //setTextUpdate(textUpdate);///NE MARCHE PAS 
+                setcurrentpost({ ...currentpost, description })
             })
             .catch((err) => console.log(err));
 
@@ -58,10 +59,10 @@ const Card = ({ post }) => {
     useEffect(() => {
 
         setIsLoading(false);
-    }, [post]);
+    }, [currentpost]);
 
     return (
-        <li className="card-container" key={post._id}>
+        <li className="card-container" key={currentpost._id}>
             {isLoading ? (
                 <i className="fas fa-spinner fa-spin"></i>
             ) : (
@@ -70,18 +71,18 @@ const Card = ({ post }) => {
                     <div className="card-right">
                         <div className="card-header">
                             <div className="email">
-                                <h3>{post.email}
+                                <h3>{currentpost.email}
                                 </h3>
 
                             </div>
-                            <span>{dateParser(post.createdAt)}</span>
+                            <span>{dateParser(currentpost.createdAt)}</span>
                         </div>
                     </div>
-                    {isUpdated === false && <p>{post.description}</p>}
+                    {isUpdated === false && <p>{currentpost.description}</p>}
                     {isUpdated && (
                         <div className="update-post">
                             <textarea
-                                defaultValue={post.description}
+                                defaultValue={currentpost.description}
                                 onChange={(e) => setTextUpdate(e.target.value)}
                             />
                             <div className="button-container">
@@ -91,20 +92,20 @@ const Card = ({ post }) => {
                             </div>
                         </div>
                     )}
-                    {post.image && <img className="post-image" src={post.imageUrl} alt="posted by user" />}
-                    {post.video && (
+                    {currentpost.image && <img className="post-image" src={currentpost.imageUrl} alt="posted by user" />}
+                    {currentpost.video && (
                         <iframe
                             width="500"
                             height="300"
-                            src={post.video}
+                            src={currentpost.video}
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
-                            title={post._id}
+                            title={currentpost._id}
                         ></iframe>
                     )}
-                    <LikeButton post={post} />
-                    {uid === post.userId && (
+                    <LikeButton post={currentpost} />
+                    {uid === currentpost.userId && (
                         <>
 
                             <div className="button-container">
@@ -113,16 +114,16 @@ const Card = ({ post }) => {
                                 </div>
 
                             </div>
-                            <DeleteCard id={post._id} />
+                            <DeleteCard id={currentpost._id} updatepost={updatePost} />
                         </>
                     )}
                     <div className="card-comment">
                         <div className="comment-icon">
                             <FontAwesomeIcon icon={faComment} onClick={() => setShowComments(!showComments)} />
-                            <span>{post.comments.length}</span>
+                            <span>{currentpost.comments.length}</span>
                         </div>
                     </div>
-                    {showComments && <CardComments post={post} />}
+                    {showComments && <CardComments post={currentpost} />}
                 </>
             )
             }</li>

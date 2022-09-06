@@ -2,7 +2,7 @@ import React from "react";
 import axios from 'axios';
 
 
-const DeleteCard = ({ id }) => {
+const DeleteCard = ({ id, updatepost }) => {
 
     const deletePost = async (postId) => {
         console.log(postId);
