@@ -5,35 +5,52 @@ const fs = require('fs');
 
 //créer un post 
 exports.createPost = (req, res, next) => {
+  
+  User.findOne({ _id: req.auth.userId, })
+  .then((user) => {
+    const userEmail = user.email;
+    const userPseudo = user.pseudo;
     
-console.log(req.body.description);
     if (req.file == undefined) {
        
         var post = new Post({
             userId: req.auth.userId,
     description: req.body.description,
+    email : userEmail,
     video: req.body.video,
-    email : req.body.email
-
+    pseudo: userPseudo
         });
+      }
+    
+      
+    
+        else {
+            console.log('else de create post');
+            var post = new Post({
+                
+        description: req.body.description,
+                userId: req.auth.userId,
+                email : userEmail,
+                pseudo:userPseudo,
+                imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+                video: req.body.video
+                
+            });
+    
+        }
+    
+    console.log(post);
+        post.save()
+            .then(() => { res.status(201).json({ message: 'post saved !' }) })
+            .catch(error => { console.log(error); })
+      
+  })
+  .catch((error) => {
+      res.status(500).json({ error });
+  });
 
-    }
 
-    else {
-        var post = new Post({
-            
-    description: req.body.description,
-            userId: req.auth.userId,
-            email : req.body.email,
-            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        });
 
-    }
-
-console.log(post);
-    post.save()
-        .then(() => { res.status(201).json({ message: 'post saved !' }) })
-        .catch(error => { console.log(error); })
 };
 
 exports.getAllPosts = (req, res, next) => {
@@ -125,24 +142,7 @@ exports.deletePost = (req, res, next) => {
         });
 };
 
-/*exports.likePost = async(req, res) => {
-    console.log('gg ligne 92');
-    try {
-        await Post.findByIdAndUpdate(
-            req.params.id, {
-                $addToSet: { usersLiked: req.body._id },
-                //$addToSet: { likes: req.param.id },
-            }, { new: true },
-            (err, docs) => {
-                if (!err) res.send(docs);
-                else return res.status(400).send(err);
-            }
-        );
-    } catch (err) {
-        console.log(err);
-        return res.status(400).send(err);
-    }
-};*/
+
 
 exports.likePost = (req, res) => {
     console.log('Like fonction lancée');
@@ -222,13 +222,18 @@ exports.undislikePost = (req, res) => {
 
 exports.commentPost = (req, res) => {
     console.log('on entre dans comment post');
-    console.log('on entre dans comment post');
+    User.findOne({ _id: req.auth.userId, })
+    .then((user) => {
+      const userEmail = user.email;
+      const userPseudo = user.pseudo;
+     
     Post.findByIdAndUpdate(
         req.params.id, {
         $push: {
             comments: {
                 commenterId: req.auth.userId,
-                commenterEmail: req.body.commenterEmail,
+                commenterEmail: userEmail,
+                commenterPseudo : userPseudo,
                 text: req.body.text,
                 timestamp: new Date().getTime(),
             },
@@ -240,6 +245,10 @@ exports.commentPost = (req, res) => {
             else return res.status(400).send(err);
         }
     );
+})
+.catch((error) => {
+    res.status(500).json({ error });
+});
 };
 
 

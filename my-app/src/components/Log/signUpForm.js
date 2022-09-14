@@ -9,6 +9,9 @@ const SignUpForm = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
+  const [pseudo, setPseudo] = useState("");
+  const [pseudoError, setPseudoError] = useState('');
+
   const handleRegister = async (e) => {
     e.preventDefault();
     //const emailError = document.querySelector(".email.error");///à modif
@@ -22,6 +25,7 @@ const SignUpForm = () => {
       data: {
         email,
         password,
+        pseudo
       },
     })
       .then((res) => {
@@ -29,6 +33,7 @@ const SignUpForm = () => {
         if (res.data.errors) {
           setEmailError(res.data.errors.email);
           setPasswordError(res.data.errors.password);
+          setPseudoError(res.data.errors.pseudo)
         } else {
           setFormSubmit(true);
         }
@@ -55,7 +60,19 @@ const SignUpForm = () => {
             value={email}
           />
           <div className="email error">
-            {emailError};
+            {emailError}
+          </div>
+          <label htmlFor="pseudo">Pseudo</label>
+          <br />
+          <input
+            type="text"
+            name="pseudo"
+            id="email"
+            onChange={(e) => setPseudo(e.target.value)}
+            value={pseudo}
+          />
+          <div className="pseudo error">
+            {pseudoError}
           </div>
           <br />
           <label htmlFor="password">Mot de passe</label>
@@ -67,9 +84,9 @@ const SignUpForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
-          <input type="submit" value="Valider votre inscription" />
+          <input type="submit" className="btn-inscription" value="Valider votre inscription" />
           <div className="password error">
-            {passwordError};
+            {passwordError}
           </div>
         </form>
       )}

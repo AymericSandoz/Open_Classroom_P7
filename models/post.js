@@ -4,7 +4,8 @@ const postSchema = mongoose.Schema({
 
     userId: { type: String },
     email: { type: String, required: true },
-    description: { type: String, required: true },
+    pseudo: { type: String, required: true },
+    description: { type: String},
     imageUrl: { type: String },
     video: { type: String },
     usersLiked: [(type = String)],
@@ -13,6 +14,7 @@ const postSchema = mongoose.Schema({
         type: [{
             commenterId: String,
             commenterEmail: String,
+            commenterPseudo: String,
             text: String,
             timestamp: Number,
         }],

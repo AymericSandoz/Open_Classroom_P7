@@ -32,7 +32,9 @@ const SignInForm = () => {
                     console.log(res.data.errors);
 
                     setEmailError(res.data.errors.email);
+                    console.log(res.data.errors.email)
                     setPasswordError(res.data.errors.password);
+                    console.log(res.data.errors.password)
 
                 } else {
                     window.location = "/";
@@ -48,7 +50,7 @@ const SignInForm = () => {
 
 
     return (
-        <form action="" onSubmit={HandleLogin} id="sign-up-form">
+        <form action="" onSubmit={HandleLogin} id="sign-in-form">
             <label htmlFor="email">Email</label>
             <br />
             <input
@@ -75,7 +77,7 @@ const SignInForm = () => {
                 {passwordError}
             </div>
             <br />
-            <input type="submit" value="Se connecter" />
+            <input type="submit" className="btn-connexion" value="Se connecter" />
         </form>
     )
 };

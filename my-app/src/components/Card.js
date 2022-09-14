@@ -6,32 +6,18 @@ import DeleteCard from './Post/DeleteCard';
 import CardComments from './Post/CardComments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons'
-const dateParser = (num) => {
-    let options = {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        weekday: "long",
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-    };
+import {FaEdit} from 'react-icons/fa';
+import { dateParser } from './Utils';
 
-    let timestamp = Date.parse(num);
 
-    let date = new Date(timestamp).toLocaleDateString("fr-FR", options);
-
-    return date.toString();
-};
-
-const Card = ({ post,updatepost }) => {
+const Card = ({ post,reloadPosts }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdated, setIsUpdated] = useState(false);
     const [textUpdate, setTextUpdate] = useState(null);
     const [showComments, setShowComments] = useState(false);
     const uid = useContext(UidContext);
     const [currentpost, setcurrentpost] = useState(post);
-
+    console.log(currentpost.imageUrl);
     const updatePost = async (postId, description) => {
 
         await axios({
@@ -68,16 +54,17 @@ const Card = ({ post,updatepost }) => {
             ) : (
                 <>
 
-                    <div className="card-right">
+                    
                         <div className="card-header">
                             <div className="email">
-                                <h3>{currentpost.email}
+                                <h3>{currentpost.pseudo}
                                 </h3>
 
                             </div>
                             <span>{dateParser(currentpost.createdAt)}</span>
                         </div>
-                    </div>
+                    
+                    <div className="post-container">
                     {isUpdated === false && <p>{currentpost.description}</p>}
                     {isUpdated && (
                         <div className="update-post">
@@ -92,7 +79,7 @@ const Card = ({ post,updatepost }) => {
                             </div>
                         </div>
                     )}
-                    {currentpost.image && <img className="post-image" src={currentpost.imageUrl} alt="posted by user" />}
+                    {currentpost.imageUrl && <img className="post-image" src={currentpost.imageUrl} alt="posted by user" />}
                     {currentpost.video && (
                         <iframe
                             width="500"
@@ -104,26 +91,40 @@ const Card = ({ post,updatepost }) => {
                             title={currentpost._id}
                         ></iframe>
                     )}
-                    <LikeButton post={currentpost} />
+                    </div>
+                    <div className="card-footer">
+                    <div className="post-edit-like-delete">
+                    <div className="like-icon">
+                    <LikeButton post={currentpost} reloadPosts={reloadPosts}/>
+                    </div>
                     {uid === currentpost.userId && (
                         <>
 
-                            <div className="button-container">
-                                <div onClick={() => setIsUpdated(!isUpdated)}>
-                                    <h4>Modifier post </h4>
+                            
+                                <div className="edit-icon" onClick={() => setIsUpdated(!isUpdated)}>
+                                   <FaEdit/>
+                                   
                                 </div>
 
+                                <div className="delete-icon">
+                            <DeleteCard id={currentpost._id} reloadPosts={reloadPosts} />
                             </div>
-                            <DeleteCard id={currentpost._id} updatepost={updatePost} />
+                            
+                       
+                            
                         </>
+                        
                     )}
-                    <div className="card-comment">
-                        <div className="comment-icon">
+                    <div className="comment-icon">
                             <FontAwesomeIcon icon={faComment} onClick={() => setShowComments(!showComments)} />
+                           
                             <span>{currentpost.comments.length}</span>
-                        </div>
+                            </div>
                     </div>
-                    {showComments && <CardComments post={currentpost} />}
+                    
+                    
+                    {showComments && <CardComments post={currentpost} reloadPosts={reloadPosts}/>}
+                    </div>
                 </>
             )
             }</li>

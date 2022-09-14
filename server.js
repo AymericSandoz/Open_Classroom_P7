@@ -26,7 +26,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images'))); //Cela indique à Express qu'il faut gérer la ressource images de manière statique (un sous-répertoire de notre répertoire de base, __dirname) à chaque fois qu'elle reçoit une requête vers la route /images. 
 
-
+console.log(path.join(path.join(__dirname, 'images')));
 
 
 //server

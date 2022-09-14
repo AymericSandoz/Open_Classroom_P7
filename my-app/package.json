@@ -26,9 +26,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "sass": "sass --watch ./src/styles/index.scss:./public/css/style.css"
   },
-  
   "browserslist": {
     "production": [
       ">0.2%",
@@ -40,5 +40,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "resolve-url-loader": "^5.0.0"
   }
 }

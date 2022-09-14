@@ -46,13 +46,7 @@ const Log = (props) => {
                 {signInModal && <SignInForm />}
 
 
-                {/*}
-//QUestion mentor pourquoi ça ne marche pas ??? 
-                if({signUpModal})
-                {<li><SignUpForm /></li>};
-                if({signInModal})
-                {<SignInForm />};
-*/}
+            
 
             </div>
         </div>

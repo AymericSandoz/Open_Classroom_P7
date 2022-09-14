@@ -1,0 +1,62 @@
+.post-container {
+    margin: 0 auto 0;
+    padding: 16px 40px;
+    border-radius: 20px;
+    position: relative;
+    background-color: $Color-Tertiaire;
+    opacity: 0.5;
+  
+    
+    .post-form {
+        position: relative;
+        margin: 0 auto 0;
+
+        .email {
+          text-align: right;
+        }
+    
+        textarea {
+          height: 100%;
+          width: 100%;
+          font-size: 1rem;
+          padding: 30px 0px;
+          border-radius: 20px 20px 20px 20px;
+        }}
+        span {
+        position: absolute;
+    right: 42px;
+    text-align: right;
+      font-weight: bold;
+    }
+
+        input {
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            transform: translate(-16px, -3px);
+            opacity: 0;
+            cursor: pointer;
+          }
+          .img-upload i {
+            border: 3px dashed red;
+            text-align: right;
+            opacity: 0;
+          }
+          .btn-form{
+            display: flex;
+            justify-content: space-between;
+            margin: 0 auto;
+            width: 100%;
+            
+            button  {
+              background-color : $Color-Primaire;
+              border-radius: 5px 5px 5px 5px;
+              border : none;
+              height: 30px;
+              
+              
+          cursor: pointer;
+            }
+          }
+
+}

@@ -3,14 +3,12 @@ import React, { useEffect, useState } from "react";
 import Routes from "./components/Routes";
 import { UidContext } from "./components/AppContext";
 import axios from "axios";
-import { useDispatch } from 'react-redux';
-import { getUser } from './actions/user.actions';
+
 
 //Objectif : stocker ID pour vérifier à chaque fois si notre utilisateurs est connecté ou pas. 
 //Le problème est que je veux récupérer token(donc faire une requete get) mais je dois
 const App = () => {
     const [uid, setUid] = useState(null);
-    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchToken = async () => {
@@ -31,9 +29,9 @@ const App = () => {
                 .catch((err) => console.log("No token   333"));
         };
         fetchToken();
-        if (uid) dispatch(getUser(uid));
+       
 
-    }, [uid, dispatch]);
+    }, [uid]);
 
     return (
         <UidContext.Provider value={uid} >

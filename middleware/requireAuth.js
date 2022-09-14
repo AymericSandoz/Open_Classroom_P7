@@ -26,7 +26,6 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
     const token = req.body.token;
-    console.log('token ou pas ? ' + token);//Pourquoi undefined alors que je joins token en data dans ma requete axios 
     if (token) {
         jwt.verify(token, 'rbircrihruihruidrnhr', async (err, decodedToken) => {
             if (err) {

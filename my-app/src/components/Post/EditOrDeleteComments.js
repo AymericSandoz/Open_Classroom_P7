@@ -3,7 +3,7 @@ import { UidContext } from "../AppContext";
 import axios from 'axios';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
-const EditDeleteComment = ({ comment, postId }) => {
+const EditDeleteComment = ({ comment, postId ,reloadPosts}) => {
     const [isAuthor, setIsAuthor] = useState(false);
     const [edit, setEdit] = useState(false);
     const [text, setText] = useState("");
@@ -19,6 +19,7 @@ const EditDeleteComment = ({ comment, postId }) => {
         })
             .then((res) => {
                 console.log('edit comment done')
+                reloadPosts();
             })
             .catch((err) => console.log(err));
 
@@ -63,33 +64,33 @@ const EditDeleteComment = ({ comment, postId }) => {
 
     return (
         <div className="edit-comment">
-            {isAuthor && edit === false && (
-                <FaEdit onClick={() => setEdit(!edit)} />
-
-            )}
             {isAuthor && (<FaTrash onClick={() => {
                 if (window.confirm("Voulez-vous supprimer ce commentaire ?")) {
                     handleDelete();
                 }
             }} />)}
+            {isAuthor && edit === false && (
+                <FaEdit onClick={() => setEdit(!edit)} />
+
+            )}
+            
             {isAuthor && edit && (
                 <form action="" onSubmit={handleEdit} className="edit-comment-form">
-                    <label htmlFor="text" onClick={() => setEdit(!edit)}>
-                        Editer
-                    </label>
+                    <FaEdit onClick={() => setEdit(!edit)} />
                     <br />
                     <input
                         type="text"
                         name="text"
                         onChange={(e) => setText(e.target.value)}
                         defaultValue={comment.text}
+                        className="form-area-edited-comment"
                     />
                     <br />
                     <div className="btn">
 
 
 
-                        <input type="submit" value="Valider modification" />
+                        <input type="submit" className="send-edited-comment" value="Valider modification" />
                     </div>
                 </form>
             )}

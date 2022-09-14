@@ -1,43 +1,46 @@
 import React, { useContext } from "react";
-
-import { NavLink } from "react-router-dom";
 import { UidContext } from "./AppContext";
 import Logout from "./Log/Logout";
 
+import { NavLink } from "react-router-dom";
+import Logo from "../images/icone-groupomania.png";
+
+import {FaUserCircle} from 'react-icons/fa';
+import {FaHome} from 'react-icons/fa';
+
+
 const Navbar = () => {
-    const uid = useContext(UidContext);//Problème : Uid est vide ! 
+    const uid = useContext(UidContext);
     return (
         <nav>
             <div className="nav-container">
                 <div className="logo">
                     <NavLink exact to="/">
-                        <div className="logo">
-                            <h3>Groupomania</h3>
-                        </div>
+                        
+                        <img src={Logo} alt="icone-groupomania"/>
+                         
+                      
                     </NavLink>
                 </div>
                 {uid ? (
-                    <ul>
-
-                        <li className="welcome">
-                            <NavLink exact to="/">
-                                <h5>Bienvenue 'aymeric'</h5>
+                    <ul className="user">
+                        <li>
+                        <NavLink exact to="/">
+                                <FaHome/>
                             </NavLink>
                         </li>
                         <li>
                             <Logout />
+                            
                         </li>
                     </ul>
                 ) : (
 
-                    <ul>
-                        <li></li>
-                        <li>
+                    
                             <NavLink exact to="/Connexion">
-                                'se connecter'
+                                <FaUserCircle/>
                             </NavLink>
-                        </li>
-                    </ul>
+                        
                 )}
             </div>
         </nav>

@@ -7,7 +7,7 @@ import { FaRegHeart } from 'react-icons/fa';
 
 
 
-const LikeButton = ({ post }) => {
+const LikeButton = ({ post, reloadPosts }) => {
     const [liked, setLiked] = useState(false);
     const uid = useContext(UidContext);
     console.log('uid :' + uid);
@@ -25,6 +25,7 @@ const LikeButton = ({ post }) => {
                 console.log('likePost !!');
                 setLiked(true);//Ne MARCHE PAS
                 console.log('liked :   !!' + liked);
+                reloadPosts();
             })
             .catch((err) => console.log(err));
     };
@@ -43,6 +44,7 @@ const LikeButton = ({ post }) => {
                 console.log('unlike post !!');
                 setLiked(false);////////NE MARCHE PAS 
                 console.log('liked :   !!' + liked);
+                reloadPosts();
             })
             .catch((err) => console.log(err));
     };
@@ -66,15 +68,19 @@ const LikeButton = ({ post }) => {
                 <div>Connectez-vous pour aimer un post !</div>
             </Popup>)}
         {uid && liked === false && (
-            <FaRegHeart onClick={() => likePost(post._id)} />//Warning: Expected `onClick` listener to be a function, instead got a value of `object` type.
-
+            <div className = 'LikeButton'> 
+            <FaRegHeart onClick={() => likePost(post._id)} />
+{post.usersLiked.length}
+</div>
         )}
         {uid && liked && (
+            <div className = 'LikeButton'> 
             <FaHeart onClick={() => unlikePost(post._id)} />
-
+{post.usersLiked.length}
+</div>
         )}
 
-        <p>nb de like : {post.usersLiked.length}</p>
+        
 
 
     </div>

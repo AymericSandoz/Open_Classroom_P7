@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from 'axios';
 import { UidContext } from "../AppContext";
-import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { FaImage } from 'react-icons/fa';
 const NewPostForm = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -11,24 +9,24 @@ const NewPostForm = () => {
     const [video, setVideo] = useState("");
     const [file, setFile] = useState();
     const uid = useContext(UidContext);
-    const userData = useSelector((state) => state.userReducer);
 
 
     const handlePost = async () => {
         if (message || postPicture || video) {
             const data = new FormData();
             data.append('description', message);
-            if (file) data.append("imageUrl", file);
+            if (file) data.append("image", file);
             data.append('video', video);
-            data.append('email', userData.email);
+            
 
-            const addPost = async (data) => {
+            console.log('file'+file);
   console.log('data description :'+data.description +'message' +message );
-                await axios({
+  console.log(data.image);
+                 axios({
                     method: "post",
                     url: 'http://localhost:5000/api/post',
-                    data: { data },
-                    headers: {"Content-Type": "multipart/form-data", "authorization": `Bearer ${localStorage.getItem('token')}` }
+                    data: data,
+                    headers: {"Content-Type": "multipart/form-data", "Authorization": `Bearer ${localStorage.getItem('token')}` }
 
                 })
                     .then((res) => {
@@ -37,8 +35,8 @@ const NewPostForm = () => {
 
                     })
                     .catch((err) => console.log(err));
-            };
-            addPost(data);
+            
+           
 
             cancelPost();
         } else {
@@ -49,11 +47,16 @@ const NewPostForm = () => {
 
 
     const handlePicture = (e) => {
-        setPostPicture(URL.createObjectURL(e.target.files[0]));
+        console.log('gogogo handle picture:'+e.target.files);
+        setPostPicture(URL.createObjectURL(e.target.files[0]));//Visualiser l'image
         setFile(e.target.files[0]);
         setVideo('');
     };
-
+const deleteImage = () => {
+    
+    setPostPicture("");
+    setFile("");
+};
     const cancelPost = () => {
         setMessage("");
         setPostPicture("");
@@ -81,7 +84,7 @@ const NewPostForm = () => {
             }
         };
         handleVideo();
-    }, [userData, message, video]);
+    }, [ message, video]);
 
     return (
         <div className="post-container">
@@ -89,13 +92,15 @@ const NewPostForm = () => {
                 <i className="fas fa-spinner fa-pulse"></i>
             ) : (<>
                 <div className="post-form">
+                
                     <textarea
                         name="message"
                         id="message"
                         placeholder="Quoi de neuf ?"
                         onChange={(e) => setMessage(e.target.value)}
                         value={message}
-                    /></div>;
+                    /></div>
+                    <img src={postPicture} alt="" />
                 {video && (
                     <iframe
                         src={video}
@@ -104,7 +109,8 @@ const NewPostForm = () => {
                         allowFullScreen
                         title={video}
                     ></iframe>)}
-                <span>{Date.now()}</span>
+                    
+                
                 {(video === "") && (
                     <>
                         <FaImage />
@@ -119,26 +125,28 @@ const NewPostForm = () => {
                         />
                     </>
                 )}
-                {(video !== "") && (
-                    <>
-                        <FaImage />
-                        <input
-                            type="file"
-                            id="file-upload"
-                            name="file"
-                            accept=".jpg, .jpeg, .png"
-                        />
-                    </>)}
-                <div className="btn">
+                 
+                 
+                    
                     {message || postPicture || video.length > 20 ? (
+                        <div className="footer-form">
+                        <div className="btn-form">
                         <button className="cancel" onClick={cancelPost}>
                             Annuler message
                         </button>
-                    ) : null}
+                        {video && (
+                  <button onClick={() => setVideo("")}>Supprimer video</button>
+                )}
+                {file && (
+                  <button onClick={() => deleteImage()}>Supprimer image</button>
+                )}
                     <button className="send" onClick={handlePost}>
                         Envoyer
                     </button>
+                    </div>
                 </div>
+                    ) : null}
+                
             </>
 
 

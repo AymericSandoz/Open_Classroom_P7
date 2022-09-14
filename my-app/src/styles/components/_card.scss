@@ -1,0 +1,86 @@
+.card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 2fr 40px ;
+   background-color: $Color-Secondaire;
+    padding: 16px;
+    border-radius: 20px;
+
+    .card-header {
+        display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2px 0 4px;
+      min-height: 35px;
+      grid-column: 1/5;
+      color: $Color-Tertiaire;
+
+      
+    }
+
+    .post-container {
+        grid-column: 1/5;
+        grid-row: 2;
+        width: 80%;
+        padding: 0;
+        background-color: white;
+        
+        iframe,img {
+          width: 100%;
+          border-radius: 10px;
+        }
+
+        
+
+        .update-post {
+            textarea {
+              border: 2px solid $Color-Tertiaire;
+              padding: 10px;
+              border-radius: 20px 20px 6px 20px;
+              width : 90%;
+              height: 100%;
+              display: block;
+                
+            }
+            .button-container {
+              .btn {
+                background: $Color-Tertiaire;
+                width: 240px;
+                display: block;
+                margin : 0 auto;
+      
+                &:hover {
+                  background: $Color-Secondaire;
+                  width: 250px;
+                }
+              }
+            }
+          }
+   
+    }
+.card-footer {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1/5;
+  
+   margin-top: 20px ;
+   
+
+    .post-edit-like-delete{
+        display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 50%;
+      margin: 0 auto;
+      .comment-icon, .edit-icon, .like-icon, .delete-icon{
+        cursor: pointer;
+        color: $Color-Tertiaire;
+      }
+       
+      
+    }
+
+  }
+    
+  
+}

@@ -8,24 +8,26 @@ const Thread = () => {
     const [loadPost, setLoadPost] = useState(true);
     const [posts, setPosts] = useState([]);
 
+    
+    const getPosts = async () => {
+        console.log('getPosts');
+        setLoadPost(true);
+        await axios
+            .get('http://localhost:5000/api/post/')
+            .then((res) => {
 
-    const updatepost = () => {
-        console.log('mise à jour de ous les potss')
-    }
+                setPosts(res.data);
+
+                setLoadPost(false);
+                console.log(res.data);
+            })
+            .catch((err) => console.log('requête axios de post actions ne fonctionne pas' + err));
+    };
+    
 
     useEffect(() => {
         if (loadPost) {
-            const getPosts = async () => {
-                await axios
-                    .get('http://localhost:5000/api/post/')
-                    .then((res) => {
-
-                        setPosts(res.data);
-
-                        setLoadPost(false);
-                    })
-                    .catch((err) => console.log('requête axios de post actions ne fonctionne pas' + err));
-            };
+         
             getPosts();
         }
     },
@@ -38,7 +40,7 @@ const Thread = () => {
                 <ul>
                     {posts.length > 0 &&
                         posts.map((post) => {
-                            return <Card post={post} updatepost={updatepost} key={post._id} />;
+                            return <Card post={post} reloadPosts={getPosts} key={post._id} />;
                         })}
                 </ul>
             </div>
