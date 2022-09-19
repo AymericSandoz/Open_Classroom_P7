@@ -15,15 +15,12 @@ const CardComments = ({ post,reloadPosts }) => {
 
                 await axios({
                     method: "post",
-                    url: `http://localhost:5000/api/post/${postId}/comments`,
+                    url: `${process.env.REACT_APP_SERVER_URL}api/post/${postId}/comments`,
                     data: { text },
                     headers: { "authorization": `Bearer ${localStorage.getItem('token')}` }
                 })
                     .then((res) => {
-                        console.log('requête axios commentaire réussis');
                         reloadPosts();
-                        console.log(reloadPosts());
-                        console.log(comment.timestamp)
                     })
                     .catch((err) => console.log(err));
             };
@@ -39,7 +36,7 @@ const CardComments = ({ post,reloadPosts }) => {
 <div className="card-comments">
             {post.comments.map((comment) => {
                 return (
-                    <div className="card-comment">
+                    <div className="card-comment" key={comment._id}>
 <div className="comment-header">
                         <div className="pseudo">
                             <h3>{comment.commenterPseudo}</h3>

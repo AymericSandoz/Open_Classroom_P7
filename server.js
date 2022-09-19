@@ -1,8 +1,9 @@
 const express = require('express'); //framework qui permet de coder plus rapidement. 
+require('dotenv').config({ path: './config/.env' });
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 const path = require('path'); //accéder au path de notre serveur :
-require('dotenv').config({ path: './config/.env' });
+
 const requireAuth = require('./middleware/requireAuth');
 require('./config/db');
 const cors = require('cors');

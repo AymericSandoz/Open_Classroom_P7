@@ -1,7 +1,7 @@
 .card-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 2fr 40px ;
+    grid-template-rows: 45px 2fr 40px ;
    background-color: $Color-Secondaire;
     padding: 16px;
     border-radius: 20px;
@@ -20,11 +20,12 @@
 
     .post-container {
         grid-column: 1/5;
-        grid-row: 2;
+        grid-row: 2/3;
         width: 80%;
-        padding: 0;
-        background-color: white;
-        
+        border: $Color-Tertiaire 5px solid;
+        padding: 16px 40px;
+    border-radius: 20px;
+    color : $Color-Tertiaire;
         iframe,img {
           width: 100%;
           border-radius: 10px;
@@ -48,6 +49,7 @@
                 width: 240px;
                 display: block;
                 margin : 0 auto;
+                cursor: pointer;
       
                 &:hover {
                   background: $Color-Secondaire;

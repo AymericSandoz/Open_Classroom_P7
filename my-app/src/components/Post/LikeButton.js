@@ -7,14 +7,15 @@ import { FaRegHeart } from 'react-icons/fa';
 
 
 
-const LikeButton = ({ post, reloadPosts }) => {
+const LikeButton = ({ post }) => {
     const [liked, setLiked] = useState(false);
     const uid = useContext(UidContext);
-    console.log('uid :' + uid);
-
+    const [forceLike,setForceLike]=useState(false);
+  
+const [counterLike,setCounterLike]=useState(post.usersLiked.length);
 
     const likePost = async (postId) => {
-        console.log('valeur de postId:' + postId);
+       
         await axios({
             method: "post",
             url: `http://localhost:5000/api/post/${postId}/like`,
@@ -23,9 +24,10 @@ const LikeButton = ({ post, reloadPosts }) => {
         })
             .then((res) => {
                 console.log('likePost !!');
+                setForceLike(true);
                 setLiked(true);//Ne MARCHE PAS
                 console.log('liked :   !!' + liked);
-                reloadPosts();
+                setCounterLike(counterLike+1);
             })
             .catch((err) => console.log(err));
     };
@@ -34,7 +36,7 @@ const LikeButton = ({ post, reloadPosts }) => {
 
         await axios({
             method: "post",
-            url: `http://localhost:5000/api/post/${postId}/unlike`,
+            url: `${process.env.REACT_APP_SERVER_URL}api/post/${postId}/unlike`,
 
 
             headers: { "authorization": `Bearer ${localStorage.getItem('token')}` }
@@ -42,9 +44,11 @@ const LikeButton = ({ post, reloadPosts }) => {
         })
             .then((res) => {
                 console.log('unlike post !!');
+                setForceLike(true);
                 setLiked(false);////////NE MARCHE PAS 
-                console.log('liked :   !!' + liked);
-                reloadPosts();
+                console.log('liked : ' + liked);
+                setCounterLike(counterLike-1);
+              
             })
             .catch((err) => console.log(err));
     };
@@ -54,11 +58,13 @@ const LikeButton = ({ post, reloadPosts }) => {
 
 
     useEffect(() => {
-        if (post.usersLiked.includes(uid)) setLiked(true);
-        else setLiked(false);
+        if (post.usersLiked.includes(uid) && !forceLike) setLiked(true);
+      
     }, [uid, post.usersLiked, liked]);
 
+
     return (<div className="like-container">
+        {liked}
         {uid === null && (
             <Popup
                 trigger={<FaHeart />}
@@ -70,13 +76,13 @@ const LikeButton = ({ post, reloadPosts }) => {
         {uid && liked === false && (
             <div className = 'LikeButton'> 
             <FaRegHeart onClick={() => likePost(post._id)} />
-{post.usersLiked.length}
+{counterLike}
 </div>
         )}
         {uid && liked && (
             <div className = 'LikeButton'> 
             <FaHeart onClick={() => unlikePost(post._id)} />
-{post.usersLiked.length}
+{counterLike}
 </div>
         )}
 

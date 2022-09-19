@@ -1,4 +1,7 @@
 
+import React, { useContext} from "react";
+
+import { UidContext } from "./AppContext";
 
 export const getDate = (num) => {
     let options = {
@@ -33,3 +36,11 @@ export const getDate = (num) => {
   
     return date.toString();
   };
+
+  export const isAdmin = () => {
+    const uid = useContext(UidContext);
+    //const admin_user_id=`${process.env.REACT_APP_ADMIN_USER_ID}`;
+    const admin_user_id='6322321abd94b7e4c5f762a1';
+     
+    return admin_user_id==uid ? true : false;
+  }

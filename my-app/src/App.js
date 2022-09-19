@@ -23,7 +23,7 @@ const App = () => {
                 //withCredentials: true,
             })
                 .then((res) => {//QUESTION MENTOR POURQUOI ça ne marche pas ? 
-                    console.log(res.data);
+                    console.log('requin' + res.data);
                     setUid(res.data);
                 })
                 .catch((err) => console.log("No token   333"));

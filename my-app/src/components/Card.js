@@ -8,28 +8,43 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons'
 import {FaEdit} from 'react-icons/fa';
 import { dateParser } from './Utils';
+import {isAdmin} from './Utils';
 
+import { FaImage } from 'react-icons/fa';
 
 const Card = ({ post,reloadPosts }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdated, setIsUpdated] = useState(false);
     const [textUpdate, setTextUpdate] = useState(null);
     const [showComments, setShowComments] = useState(false);
+    const [postPicture,setPostPicture]=useState(post.imageUrl);
+    const [file,setFile]=useState();
+    const [video,setVideo]=useState(post.video);
     const uid = useContext(UidContext);
-    const [currentpost, setcurrentpost] = useState(post);
-    console.log(currentpost.imageUrl);
+  
+   
+
+   
+
+
     const updatePost = async (postId, description) => {
+        
+            const data = new FormData();
+            data.append('description', textUpdate);
+            if (file) data.append("image", file);
+           
+        
+        
 
         await axios({
             method: "put",
-            url: `http://localhost:5000/api/post/${postId}`,
-            data: { description },
+            url: `${process.env.REACT_APP_SERVER_URL}api/post/${postId}`,
+            data:  data ,
             headers: { "authorization": `Bearer ${localStorage.getItem('token')}` }
         })
             .then((res) => {
-                console.log(textUpdate);
-                //setTextUpdate(textUpdate);///NE MARCHE PAS 
-                setcurrentpost({ ...currentpost, description })
+                
+                reloadPosts();
             })
             .catch((err) => console.log(err));
 
@@ -42,13 +57,43 @@ const Card = ({ post,reloadPosts }) => {
         setIsUpdated(false);
     };
 
-    useEffect(() => {
+    const updatePicture = (e) => {
+        console.log('gogogo handle picture:'+e.target.files);
+        setPostPicture(URL.createObjectURL(e.target.files[0]));//Visualiser l'image
+        setFile(e.target.files[0]);
+      
+        console.log('seecheeath')
+    };
+const deleteImage = () => {
+    
+    setPostPicture("");
+    setFile("");
+};
 
+    useEffect(() => {
+        if (textUpdate) {
+        const handleVideo = () => {
+           
+            let findLink = textUpdate.split(" ");
+            for (let i = 0; i < findLink.length; i++) {
+                if (
+                    findLink[i].includes("https://www.yout") ||
+                    findLink[i].includes("https://yout")
+                ) {
+                    let embed = findLink[i].replace("watch?v=", "embed/");
+                    setVideo(embed.split("&")[0]);
+                    findLink.splice(i, 1);
+                    setTextUpdate(findLink.join(" "));
+                    setPostPicture('');
+                }
+            }
+        };
+        handleVideo();}
         setIsLoading(false);
-    }, [currentpost]);
+    }, [post,video,textUpdate]);
 
     return (
-        <li className="card-container" key={currentpost._id}>
+        <li className="card-container" key={post._id}>
             {isLoading ? (
                 <i className="fas fa-spinner fa-spin"></i>
             ) : (
@@ -57,19 +102,19 @@ const Card = ({ post,reloadPosts }) => {
                     
                         <div className="card-header">
                             <div className="email">
-                                <h3>{currentpost.pseudo}
+                                <h3>{post.pseudo}
                                 </h3>
 
                             </div>
-                            <span>{dateParser(currentpost.createdAt)}</span>
+                            <span>{dateParser(post.createdAt)}</span>
                         </div>
                     
                     <div className="post-container">
-                    {isUpdated === false && <p>{currentpost.description}</p>}
+                    {isUpdated === false && <p>{post.description}</p>}
                     {isUpdated && (
                         <div className="update-post">
                             <textarea
-                                defaultValue={currentpost.description}
+                                defaultValue={post.description}
                                 onChange={(e) => setTextUpdate(e.target.value)}
                             />
                             <div className="button-container">
@@ -79,25 +124,65 @@ const Card = ({ post,reloadPosts }) => {
                             </div>
                         </div>
                     )}
-                    {currentpost.imageUrl && <img className="post-image" src={currentpost.imageUrl} alt="posted by user" />}
-                    {currentpost.video && (
+                    {postPicture && <img className="post-image" src={postPicture} alt="posted by user" />
+                    
+                    }
+                    {isUpdated && postPicture && (
+                    <>
+                    <button><FaImage /> Modifier image </button>
+               
+                        <input
+                            type="file"
+                            id="file-upload"
+                            name="file"
+                            accept=".jpg, .jpeg, .png"
+
+
+                            onChange={(e) => updatePicture(e)}
+                        />
+                       
+                  <button onClick={() => deleteImage()}>Supprimer image</button>
+                
+                    </>)} 
+                     {isUpdated && !postPicture && !video &&  (
+                        <><button><FaImage /> Ajouter une image </button>
+               
+               <input
+                   type="file"
+                   id="file-upload"
+                   name="file"
+                   accept=".jpg, .jpeg, .png"
+
+
+                   onChange={(e) => updatePicture(e)}
+               /></>)
+                    }
+                     
+
+
+                    {video && (
                         <iframe
                             width="500"
                             height="300"
-                            src={currentpost.video}
+                            src={video}
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
-                            title={currentpost._id}
+                            title={post._id}
                         ></iframe>
+
                     )}
+                    {isUpdated && video.length > 20 && (
+                        
+                        <button onClick={() => setVideo("")}>Supprimer video</button>
+                      )}
                     </div>
                     <div className="card-footer">
                     <div className="post-edit-like-delete">
                     <div className="like-icon">
-                    <LikeButton post={currentpost} reloadPosts={reloadPosts}/>
+                    <LikeButton post={post} />
                     </div>
-                    {uid === currentpost.userId && (
+                    {uid===post.userId  | isAdmin() ? (
                         <>
 
                             
@@ -107,23 +192,23 @@ const Card = ({ post,reloadPosts }) => {
                                 </div>
 
                                 <div className="delete-icon">
-                            <DeleteCard id={currentpost._id} reloadPosts={reloadPosts} />
+                            <DeleteCard id={post._id} reloadPosts={reloadPosts} />
                             </div>
                             
                        
                             
                         </>
                         
-                    )}
+                    ):(null)}
                     <div className="comment-icon">
                             <FontAwesomeIcon icon={faComment} onClick={() => setShowComments(!showComments)} />
                            
-                            <span>{currentpost.comments.length}</span>
+                            <span>{post.comments.length}</span>
                             </div>
                     </div>
                     
                     
-                    {showComments && <CardComments post={currentpost} reloadPosts={reloadPosts}/>}
+                    {showComments && <CardComments post={post} reloadPosts={reloadPosts}/>}
                     </div>
                 </>
             )

@@ -1,11 +1,16 @@
-.post-container {
-    margin: 0 auto 0;
+.new-post-container {
+    margin : 0 30px 0 30px ;
     padding: 16px 40px;
     border-radius: 20px;
     position: relative;
     background-color: $Color-Tertiaire;
     opacity: 0.5;
-  
+    
+    iframe,img {
+      width: 100%;
+      border-radius: 10px;
+      opacity : 1;
+    }
     
     .post-form {
         position: relative;
@@ -38,7 +43,6 @@
             cursor: pointer;
           }
           .img-upload i {
-            border: 3px dashed red;
             text-align: right;
             opacity: 0;
           }

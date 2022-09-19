@@ -1,24 +1,25 @@
 
 .card-comments {
-    border: 2px solid $Color-Tertiaire;
+    //border: 2px solid $Color-Tertiaire;
     padding: 15px;
-    margin: 5px 0;
-    border-radius: 20px 20px 20px 6px;
+    background-color: $Color-Tertiaire;
+    border-radius : 10px;
 
 .card-comment {
     display: grid;
     width: 100%;
+    margin: 10px 0 10px 0;
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 50px 1fr 30px;
-   
-
+    background-color: $Color-Secondaire;
+    border-radius : 10px;
+color : $Color-Tertiaire;
+border : $Color-Tertiaire 3px solid;
 
     .comment-header {
         display: flex;
         grid-row: 1;
         grid-column: 1/4;
-        color : white;
-        background-color: $Color-Tertiaire;
         border-radius:  5px 5px 0 0;
 
         .pseudo {
@@ -44,8 +45,6 @@
     .comment-content {
         grid-row: 2;
     grid-column: 1/4;
-color : white;
-        background-color: $Color-Tertiaire;
         border-radius: 0 0 5px 5px;
     }
     p{
@@ -79,8 +78,7 @@ color : white;
 
     .send-form {
        
-        color : white;
-        background-color: $Color-Tertiaire;
+        background-color: $Color-Secondaire;
       width : 30%;
       max-width: 200px;
 transition : 300ms; 

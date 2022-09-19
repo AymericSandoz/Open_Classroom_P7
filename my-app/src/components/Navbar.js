@@ -3,7 +3,7 @@ import { UidContext } from "./AppContext";
 import Logout from "./Log/Logout";
 
 import { NavLink } from "react-router-dom";
-import Logo from "../images/icone-groupomania.png";
+import Logo from "../images/icon-left-font-monochrome-black.png";
 
 import {FaUserCircle} from 'react-icons/fa';
 import {FaHome} from 'react-icons/fa';
@@ -11,6 +11,7 @@ import {FaHome} from 'react-icons/fa';
 
 const Navbar = () => {
     const uid = useContext(UidContext);
+    const pseudo = localStorage.getItem('pseudo');
     return (
         <nav>
             <div className="nav-container">
@@ -22,9 +23,14 @@ const Navbar = () => {
                       
                     </NavLink>
                 </div>
+
                 {uid ? (
                     <ul className="user">
                         <li>
+                        <h4> Bienvenu {pseudo} </h4>
+                        </li>
+                        <li>
+                        
                         <NavLink exact to="/">
                                 <FaHome/>
                             </NavLink>

@@ -7,8 +7,8 @@ var validateEmail = function(email) {
 
 const userSchema = mongoose.Schema({
     email: { type: String, required: true, unique: true, validate: [validateEmail, 'invalid email'] }, //********New modif
-    pseudo: { type: String, required: true, unique: true},
-    password: { type: String, required: true },
+    pseudo: { type: String, required: true,minLength: 5,maxLength: 30, unique: true},
+    password: { type: String,required: true },
 });
 
 userSchema.plugin(uniqueValidator);

@@ -14,9 +14,10 @@ console.log("onclickdelete");
     }
     const deletePost = async () => {
         console.log(id);
+        console.log('delete front');
         await axios({
             method: "delete",
-            url: `http://localhost:5000/api/post/${id}`,
+            url: `${process.env.REACT_APP_SERVER_URL}api/post/${id}`,
             headers: { "authorization": `Bearer ${localStorage.getItem('token')}` }
         })
             .then((res) => {

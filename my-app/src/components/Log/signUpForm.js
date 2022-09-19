@@ -14,14 +14,12 @@ const SignUpForm = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    //const emailError = document.querySelector(".email.error");///à modif
-    //const passwordError = document.querySelector(".password.error");
-
+ 
 
 
     await axios({
       method: "post",
-      url: 'http://localhost:5000/api/user/register',
+      url: `${process.env.REACT_APP_SERVER_URL}api/user/register`,
       data: {
         email,
         password,
@@ -29,13 +27,17 @@ const SignUpForm = () => {
       },
     })
       .then((res) => {
-        console.log(res);
-        if (res.data.errors) {
-          setEmailError(res.data.errors.email);
-          setPasswordError(res.data.errors.password);
-          setPseudoError(res.data.errors.pseudo)
+        console.log(res.data.pseudo || res.data.email);
+;        if (res.data.pseudo) {
+          setPseudoError(res.data.pseudo);
+          setEmailError(res.data.email);
         } else {
+          if(passwordError.length < 6) {
+            setPasswordError('Le mot de passe doit contenir au moins 6 caractères');
+          }
+          else  {
           setFormSubmit(true);
+        }
         }
       })
       .catch((err) => console.log(err));
@@ -84,10 +86,13 @@ const SignUpForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
-          <input type="submit" className="btn-inscription" value="Valider votre inscription" />
+          <br />
           <div className="password error">
             {passwordError}
           </div>
+          <br />
+          <input type="submit" className="btn-inscription" value="Valider votre inscription" />
+          
         </form>
       )}
     </>

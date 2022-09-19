@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { UidContext } from "../AppContext";
 import axios from 'axios';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import {isAdmin} from '../Utils';
 
 const EditDeleteComment = ({ comment, postId ,reloadPosts}) => {
-    const [isAuthor, setIsAuthor] = useState(false);
+   
+    const [isAllowed,setIsAllowed] =useState(false);
     const [edit, setEdit] = useState(false);
     const [text, setText] = useState("");
     const uid = useContext(UidContext);
@@ -29,12 +31,13 @@ const EditDeleteComment = ({ comment, postId ,reloadPosts}) => {
 
         await axios({
             method: "delete",
-            url: `http://localhost:5000/api/post/${postId}/delete-comments`,
+            url: `${process.env.REACT_APP_SERVER_URL}api/post/${postId}/delete-comments`,
             data: { commentId },
             headers: { "authorization": `Bearer ${localStorage.getItem('token')}` }
         })
             .then((res) => {
-                console.log('com supprimé')
+                console.log('com supprimé');
+                reloadPosts();
             })
             .catch((err) => console.log(err));
 
@@ -54,27 +57,31 @@ const EditDeleteComment = ({ comment, postId ,reloadPosts}) => {
     const handleDelete = () => deleteComment(postId, comment._id);
 
     useEffect(() => {
-        const checkAuthor = () => {
-            if (uid === comment.commenterId) {
-                setIsAuthor(true);
+        
+
+        const checkRight= () => {
+            if (uid === comment.commenterId ) {
+                setIsAllowed(true);
             }
+        
         };
-        checkAuthor();
+        checkRight();
+        console.log('isAllowed'+isAllowed);
     }, [uid, comment.commenterId]);
 
     return (
         <div className="edit-comment">
-            {isAuthor && (<FaTrash onClick={() => {
+            {isAllowed | isAdmin() ? (<FaTrash onClick={() => {
                 if (window.confirm("Voulez-vous supprimer ce commentaire ?")) {
                     handleDelete();
                 }
-            }} />)}
-            {isAuthor && edit === false && (
+            }} />):(null)}
+            {(isAllowed | isAdmin())  && edit === false ? (
                 <FaEdit onClick={() => setEdit(!edit)} />
 
-            )}
+            ):(null)}
             
-            {isAuthor && edit && (
+            {(isAllowed | isAdmin()) && edit ? (
                 <form action="" onSubmit={handleEdit} className="edit-comment-form">
                     <FaEdit onClick={() => setEdit(!edit)} />
                     <br />
@@ -93,7 +100,7 @@ const EditDeleteComment = ({ comment, postId ,reloadPosts}) => {
                         <input type="submit" className="send-edited-comment" value="Valider modification" />
                     </div>
                 </form>
-            )}
+            ):(null)}
         </div>
     );
 };

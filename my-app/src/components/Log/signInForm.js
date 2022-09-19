@@ -6,8 +6,7 @@ import axios from 'axios';
 const SignInForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
+    const [identificationError, setIdentificationError] = useState('');
 
     const HandleLogin = (e) => {
         e.preventDefault();
@@ -18,7 +17,7 @@ const SignInForm = () => {
 
         axios({
             method: "post",
-            url: 'http://localhost:5000/api/user/login',
+            url: `${process.env.REACT_APP_SERVER_URL}api/user/login`,
             //withCredentials: true,   !!!marche pas 
             data: {
                 email: email,
@@ -26,25 +25,23 @@ const SignInForm = () => {
             },
         })
             .then((res) => {/////marche pas, on va directement dans le catch. QUESTION MENTOR
-                console.log('res data error : ' + res);
+                console.log('res data error : ' + res.data.error);
 
-                if (res.data.errors) {
-                    console.log(res.data.errors);
+                if (res.data.error) {
+                    console.log(res.data.error);
 
-                    setEmailError(res.data.errors.email);
-                    console.log(res.data.errors.email)
-                    setPasswordError(res.data.errors.password);
-                    console.log(res.data.errors.password)
+                setIdentificationError(res.data.error)
 
                 } else {
                     window.location = "/";
                     localStorage.setItem('token', res.data.token);
-
+                    localStorage.setItem('pseudo', res.data.pseudo);
 
                 }
             })
             .catch((err) => {
-                console.log('requete axios singnINform ne marche pas' + err);
+                console.log('lalallalalallallalalala');
+                console.log(err);
             });
     };
 
@@ -60,9 +57,6 @@ const SignInForm = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
             />
-            <div className="email error">
-                {emailError}
-            </div>
             <br />
             <label htmlFor="password">Mot de passe</label>
             <br />
@@ -73,8 +67,9 @@ const SignInForm = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
             />
-            <div className="password error">
-                {passwordError}
+            <br />
+            <div className="identification error">
+                {identificationError}
             </div>
             <br />
             <input type="submit" className="btn-connexion" value="Se connecter" />

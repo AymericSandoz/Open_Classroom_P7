@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from 'axios';
 import { UidContext } from "../AppContext";
 import { FaImage } from 'react-icons/fa';
-const NewPostForm = () => {
+const NewPostForm = ({getPosts}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [message, setMessage] = useState("");
     const [postPicture, setPostPicture] = useState(null);
@@ -24,13 +24,13 @@ const NewPostForm = () => {
   console.log(data.image);
                  axios({
                     method: "post",
-                    url: 'http://localhost:5000/api/post',
+                    url: `${process.env.REACT_APP_SERVER_URL}api/post`,
                     data: data,
                     headers: {"Content-Type": "multipart/form-data", "Authorization": `Bearer ${localStorage.getItem('token')}` }
 
                 })
                     .then((res) => {
-
+                        getPosts();
                         console.log(res.data);;
 
                     })
@@ -87,7 +87,7 @@ const deleteImage = () => {
     }, [ message, video]);
 
     return (
-        <div className="post-container">
+        <div className="new-post-container">
             {isLoading ? (
                 <i className="fas fa-spinner fa-pulse"></i>
             ) : (<>
