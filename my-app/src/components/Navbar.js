@@ -35,6 +35,7 @@ const Navbar = () => {
                                 <FaHome/>
                             </NavLink>
                         </li>
+                        
                         <li>
                             <Logout />
                             

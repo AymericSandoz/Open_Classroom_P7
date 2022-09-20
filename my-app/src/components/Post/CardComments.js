@@ -21,6 +21,7 @@ const CardComments = ({ post,reloadPosts }) => {
                 })
                     .then((res) => {
                         reloadPosts();
+                        setText('');
                     })
                     .catch((err) => console.log(err));
             };

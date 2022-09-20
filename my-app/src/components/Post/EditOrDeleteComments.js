@@ -22,6 +22,7 @@ const EditDeleteComment = ({ comment, postId ,reloadPosts}) => {
             .then((res) => {
                 console.log('edit comment done')
                 reloadPosts();
+                setEdit(false);
             })
             .catch((err) => console.log(err));
 
@@ -71,34 +72,31 @@ const EditDeleteComment = ({ comment, postId ,reloadPosts}) => {
 
     return (
         <div className="edit-comment">
-            {isAllowed | isAdmin() ? (<FaTrash onClick={() => {
+            {isAllowed || isAdmin() ? (<FaTrash className="delete-icon" onClick={() => {
                 if (window.confirm("Voulez-vous supprimer ce commentaire ?")) {
                     handleDelete();
                 }
             }} />):(null)}
-            {(isAllowed | isAdmin())  && edit === false ? (
-                <FaEdit onClick={() => setEdit(!edit)} />
+            {(isAllowed || isAdmin())  && edit === false ? (
+                <FaEdit className="edit-icon" onClick={() => setEdit(!edit)} />
 
             ):(null)}
             
-            {(isAllowed | isAdmin()) && edit ? (
+            {(isAllowed || isAdmin()) && edit ? (
                 <form action="" onSubmit={handleEdit} className="edit-comment-form">
                     <FaEdit onClick={() => setEdit(!edit)} />
                     <br />
-                    <input
-                        type="text"
+                    <textarea
+                        
                         name="text"
                         onChange={(e) => setText(e.target.value)}
                         defaultValue={comment.text}
                         className="form-area-edited-comment"
                     />
                     <br />
-                    <div className="btn">
-
-
 
                         <input type="submit" className="send-edited-comment" value="Valider modification" />
-                    </div>
+                  
                 </form>
             ):(null)}
         </div>

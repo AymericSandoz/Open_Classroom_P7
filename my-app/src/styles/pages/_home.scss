@@ -1,5 +1,14 @@
+#root {
+ 
+        background-color:  #eee;;
+       
+    
+.main {
+margin : 0 10% 0 10%;
 .home-header {
-.connexion-container {
+
+    
+/*.connexion-container {
     display: flex;
     margin : 0 auto;
     padding: 16px;
@@ -10,7 +19,7 @@
     text-align: center;
     background-color: $Color-Secondaire;
 
-}
+}*/
 
 p {
     background-color: white;
@@ -23,5 +32,7 @@ p {
     margin : 0 auto;
     opacity: 0.5;
     font-weight:bold;
+}
+}
 }
 }

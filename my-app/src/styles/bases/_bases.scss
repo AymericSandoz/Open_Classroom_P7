@@ -1,7 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
+
 a{
     text-decoration: none;
     color : black;
   }
   textarea:focus {
     outline: 3px solid $Color-Tertiaire;
+    }
+  
+    *{
+      list-style-type: none;
+      box-sizing: border-box;
+      font-family: Lato;
     }

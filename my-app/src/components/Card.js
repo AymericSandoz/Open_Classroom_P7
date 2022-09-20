@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef,useLayoutEffect} from "react";
 import LikeButton from './Post/LikeButton';
 import axios from 'axios';
 import { UidContext } from "./AppContext";
@@ -12,6 +12,8 @@ import {isAdmin} from './Utils';
 
 import { FaImage } from 'react-icons/fa';
 
+
+
 const Card = ({ post,reloadPosts }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdated, setIsUpdated] = useState(false);
@@ -19,22 +21,19 @@ const Card = ({ post,reloadPosts }) => {
     const [showComments, setShowComments] = useState(false);
     const [postPicture,setPostPicture]=useState(post.imageUrl);
     const [file,setFile]=useState();
+    const fileInput = useRef(null);
     const [video,setVideo]=useState(post.video);
     const uid = useContext(UidContext);
-  
-   
-
-   
-
+    //const textareaRef = useRef(null);
+    //const MIN_TEXTAREA_HEIGHT = 32;
 
     const updatePost = async (postId, description) => {
-        
+      
             const data = new FormData();
             data.append('description', textUpdate);
             if (file) data.append("image", file);
-           
-        
-        
+            console.log('lapin',data);
+
 
         await axios({
             method: "put",
@@ -43,6 +42,7 @@ const Card = ({ post,reloadPosts }) => {
             headers: { "authorization": `Bearer ${localStorage.getItem('token')}` }
         })
             .then((res) => {
+                console.log(textUpdate);
                 
                 reloadPosts();
             })
@@ -51,9 +51,9 @@ const Card = ({ post,reloadPosts }) => {
     };
     const updateItem = () => {
 
-        if (textUpdate) {
+       
             updatePost(post._id, textUpdate);
-        }
+        
         setIsUpdated(false);
     };
 
@@ -92,6 +92,18 @@ const deleteImage = () => {
         setIsLoading(false);
     }, [post,video,textUpdate]);
 
+
+  /*useLayoutEffect(() => {
+    console.log(textareaRef);
+        // Reset height - important to shrink on delete
+        textareaRef.current.style.height = "inherit";
+        // Set height
+        textareaRef.current.style.height = `${Math.max(
+          textareaRef.current.scrollHeight,
+          MIN_TEXTAREA_HEIGHT
+        )}px`;
+      }, [textUpdate]);*/
+
     return (
         <li className="card-container" key={post._id}>
             {isLoading ? (
@@ -110,56 +122,10 @@ const deleteImage = () => {
                         </div>
                     
                     <div className="post-container">
-                    {isUpdated === false && <p>{post.description}</p>}
-                    {isUpdated && (
-                        <div className="update-post">
-                            <textarea
-                                defaultValue={post.description}
-                                onChange={(e) => setTextUpdate(e.target.value)}
-                            />
-                            <div className="button-container">
-                                <button className="btn" onClick={updateItem}>
-                                    Valider modification
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                    
                     {postPicture && <img className="post-image" src={postPicture} alt="posted by user" />
                     
                     }
-                    {isUpdated && postPicture && (
-                    <>
-                    <button><FaImage /> Modifier image </button>
-               
-                        <input
-                            type="file"
-                            id="file-upload"
-                            name="file"
-                            accept=".jpg, .jpeg, .png"
-
-
-                            onChange={(e) => updatePicture(e)}
-                        />
-                       
-                  <button onClick={() => deleteImage()}>Supprimer image</button>
-                
-                    </>)} 
-                     {isUpdated && !postPicture && !video &&  (
-                        <><button><FaImage /> Ajouter une image </button>
-               
-               <input
-                   type="file"
-                   id="file-upload"
-                   name="file"
-                   accept=".jpg, .jpeg, .png"
-
-
-                   onChange={(e) => updatePicture(e)}
-               /></>)
-                    }
-                     
-
-
                     {video && (
                         <iframe
                             width="500"
@@ -172,10 +138,75 @@ const deleteImage = () => {
                         ></iframe>
 
                     )}
+                    {isUpdated === false && <p>{post.description}</p>}
+                    {isUpdated && (
+                        <div className="update-post">
+                            
+                            <textarea
+                                defaultValue={post.description}
+                               
+                                //style={{
+                                   // minHeight: MIN_TEXTAREA_HEIGHT,
+                                   // resize: "none"
+                                  //}}
+                               
+                                onChange={(e) => setTextUpdate(e.target.value)}
+                                //ref={textareaRef}
+                                
+                            />
+                            
+                        </div>
+                    )}
+                    <div className="button-container">
+                    {isUpdated && postPicture && (
+                    <div className="update-image-btn"> 
+                    <button onClick={() => fileInput.current.click()}><FaImage /> Modifier image </button>
+               
+                        <input
+                            type="file"
+                            id="file-upload"
+                            name="file"
+                            accept=".jpg, .jpeg, .png"
+                            
+                            ref={fileInput}
+                            style={{ display: 'none' }}
+
+
+                            onChange={(e) => updatePicture(e)}
+                        />
+                       
+                  <button onClick={() => deleteImage()}>Supprimer image</button>
+                
+                    </div>)} 
+                     {isUpdated && !postPicture && !video &&  (
+                        <><button onClick={() => fileInput.current.click()}><FaImage /> Ajouter une image </button>
+               
+               <input
+                   type="file"
+                   id="file-upload"
+                   name="file"
+                   accept=".jpg, .jpeg, .png"
+
+                   ref={fileInput}
+                   style={{ display: 'none' }}
+                   onChange={(e) => updatePicture(e)}
+               /></>)
+                    }
+                     
+
+
+                    
                     {isUpdated && video.length > 20 && (
                         
                         <button onClick={() => setVideo("")}>Supprimer video</button>
                       )}
+                    {isUpdated  && (
+                            
+                                <button className="btn" onClick={updateItem}>
+                                    Valider modification
+                                </button>
+                           )}
+                           </div>
                     </div>
                     <div className="card-footer">
                     <div className="post-edit-like-delete">

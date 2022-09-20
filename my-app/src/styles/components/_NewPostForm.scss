@@ -1,11 +1,14 @@
 .new-post-container {
-    margin : 0 30px 0 30px ;
+    margin : 0 20px 0 20px ;
     padding: 16px 40px;
     border-radius: 20px;
     position: relative;
     background-color: $Color-Tertiaire;
     opacity: 0.5;
-    
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5); 
+    &:hover {
+      box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.5); 
+  }
     iframe,img {
       width: 100%;
       border-radius: 10px;
@@ -24,7 +27,7 @@
           height: 100%;
           width: 100%;
           font-size: 1rem;
-          padding: 30px 0px;
+          padding: 30px 5px  5px 10px;
           border-radius: 20px 20px 20px 20px;
         }}
         span {
@@ -44,7 +47,7 @@
           }
           .img-upload i {
             text-align: right;
-            opacity: 0;
+            opacity: 1;
           }
           .btn-form{
             display: flex;
