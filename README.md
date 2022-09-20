@@ -10,7 +10,7 @@ Utilisation de MongoDB comme base de données;
 
 ## Prerequis
 Veuillez installez : 
-Node Js, Mongoose, express.  
+Node Js, Mongoose, express, multer.  
 
 ## Initialisation du projet
 
