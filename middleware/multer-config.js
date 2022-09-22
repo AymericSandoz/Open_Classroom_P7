@@ -19,9 +19,9 @@ const storage = multer.diskStorage({
         const name = file.originalname.split(' ').join('_');
         const extension = MIME_TYPES[file.mimetype];
         callback(null, name + Date.now() + '.' + extension);
-        console.log('originalname:'+file.originalname);
+        
     }
 });
 
 
-module.exports = multer({ storage: storage }).single('image');
+module.exports = multer({ storage: storage }).single('image');//exportons ensuite l'élément multer entièrement configuré, lui passons notre constante storage et lui indiquons que nous gérerons uniquement les téléchargements de fichiers image.

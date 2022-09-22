@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SignInForm from "./signInForm";
 
-const SignUpForm = () => {
+const SignUpForm = (props) => {
   const [formSubmit, setFormSubmit] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,12 +11,14 @@ const SignUpForm = () => {
 
   const [pseudo, setPseudo] = useState("");
   const [pseudoError, setPseudoError] = useState('');
+  const passwordMinimunLengthSecurity=5;
+
+
 
   const handleRegister = async (e) => {
     e.preventDefault();
- 
-
-
+    if (password.length > passwordMinimunLengthSecurity){
+      
     await axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_URL}api/user/register`,
@@ -27,23 +29,42 @@ const SignUpForm = () => {
       },
     })
       .then((res) => {
-        console.log(res.data.pseudo || res.data.email);
-;        if (res.data.pseudo) {
-          setPseudoError(res.data.pseudo);
-          setEmailError(res.data.email);
-        } else {
-          if(passwordError.length < 6) {
-            setPasswordError('Le mot de passe doit contenir au moins 6 caractères');
-          }
+        
+       if (res.data.pseudo=="" && res.data.email=="" ) {
+      
+        
+        setFormSubmit(true);
+        
+        } 
+        else if (res.data.message=="Utilisateur créé !"){
+  
+         setFormSubmit(true);
+          
+        }
           else  {
-          setFormSubmit(true);
+            setPseudoError(res.data.pseudo);
+            setEmailError(res.data.email);
         }
-        }
+        
       })
       .catch((err) => console.log(err));
+    }
+
+    else {
+      setPasswordError(`Le mot de passe doit contenir plus de ${passwordMinimunLengthSecurity} caractères`);
+    }
   };
 
-
+  useEffect(() => {
+    if (password.length > passwordMinimunLengthSecurity){
+      setPasswordError("");
+    }
+    else  {
+      setPasswordError(`Le mot de passe doit contenir plus de ${passwordMinimunLengthSecurity} caractères`);
+    }
+  }, [password]);
+  
+  
   return (
     <>
       {formSubmit ? (
@@ -92,7 +113,7 @@ const SignUpForm = () => {
           </div>
           <br />
           <input type="submit" className="btn-inscription" value="Valider votre inscription" />
-          
+          <input type="submit" className="btn-inscription-mobile" value="Valider" />
         </form>
       )}
     </>

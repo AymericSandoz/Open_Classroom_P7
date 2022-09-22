@@ -4,7 +4,7 @@ import Log from "../components/Log";
 const Connexion = () => {
         return (
                 <div>
-                        <Log signin={false} signup={true} />
+                        <Log signin={true} signup={false} />
                 </ div>)
 };
 

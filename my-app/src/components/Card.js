@@ -7,7 +7,7 @@ import CardComments from './Post/CardComments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons'
 import {FaEdit} from 'react-icons/fa';
-import { dateParser } from './Utils';
+import { getPostDate } from './Utils';
 import {isAdmin} from './Utils';
 
 import { FaImage } from 'react-icons/fa';
@@ -27,13 +27,13 @@ const Card = ({ post,reloadPosts }) => {
     //const textareaRef = useRef(null);
     //const MIN_TEXTAREA_HEIGHT = 32;
 
-    const updatePost = async (postId, description) => {
+    const updatePost = async (postId) => {
       
             const data = new FormData();
             data.append('description', textUpdate);
             if (file) data.append("image", file);
-            console.log('lapin',data);
-
+            
+            if (video) data.append('video', video);
 
         await axios({
             method: "put",
@@ -42,7 +42,7 @@ const Card = ({ post,reloadPosts }) => {
             headers: { "authorization": `Bearer ${localStorage.getItem('token')}` }
         })
             .then((res) => {
-                console.log(textUpdate);
+                
                 
                 reloadPosts();
             })
@@ -58,11 +58,8 @@ const Card = ({ post,reloadPosts }) => {
     };
 
     const updatePicture = (e) => {
-        console.log('gogogo handle picture:'+e.target.files);
         setPostPicture(URL.createObjectURL(e.target.files[0]));//Visualiser l'image
         setFile(e.target.files[0]);
-      
-        console.log('seecheeath')
     };
 const deleteImage = () => {
     
@@ -80,16 +77,21 @@ const deleteImage = () => {
                     findLink[i].includes("https://www.yout") ||
                     findLink[i].includes("https://yout")
                 ) {
+                    
                     let embed = findLink[i].replace("watch?v=", "embed/");
                     setVideo(embed.split("&")[0]);
                     findLink.splice(i, 1);
                     setTextUpdate(findLink.join(" "));
+                    console.log('embed.split("&")[0];;',embed.split("&")[0])
+                    console.log('video;;',video);
+                    console.log('video;;',textUpdate);
                     setPostPicture('');
                 }
             }
         };
         handleVideo();}
         setIsLoading(false);
+
     }, [post,video,textUpdate]);
 
 
@@ -106,7 +108,8 @@ const deleteImage = () => {
 
     return (
         <li className="card-container" key={post._id}>
-            {isLoading ? (
+            
+            {isLoading ? (//Tant que les post chargent charge, on affiche un spinner. 
                 <i className="fas fa-spinner fa-spin"></i>
             ) : (
                 <>
@@ -118,7 +121,7 @@ const deleteImage = () => {
                                 </h3>
 
                             </div>
-                            <span>{dateParser(post.createdAt)}</span>
+                            <span>{getPostDate(post.createdAt)}</span>
                         </div>
                     
                     <div className="post-container">
@@ -132,7 +135,7 @@ const deleteImage = () => {
                             height="300"
                             src={video}
                             frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            //allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                             title={post._id}
                         ></iframe>
@@ -144,7 +147,7 @@ const deleteImage = () => {
                             
                             <textarea
                                 defaultValue={post.description}
-                               
+                            
                                 //style={{
                                    // minHeight: MIN_TEXTAREA_HEIGHT,
                                    // resize: "none"
@@ -213,7 +216,7 @@ const deleteImage = () => {
                     <div className="like-icon">
                     <LikeButton post={post} />
                     </div>
-                    {uid===post.userId  | isAdmin() ? (
+                    {uid===post.userId  || isAdmin() ? (
                         <>
 
                             

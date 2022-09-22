@@ -1,16 +1,34 @@
 .connection-form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+.form-container {
     background-color:  $Color-Secondaire;
     width: 60%;
-    padding: 20px 0;
-    margin-left : 20%;
+    padding: 20px 0 20px 0;
+    
     user-select: none;
     text-align: center;
+    
+   
 border: 2px $Color-Tertiaire solid;
+@include mobile-only  {
+    width: 90%;
+}
+
+
+.error {
+    color : $Color-Primaire;
+    font-weight: bold;
+}
   
     ul {
       
       display: flex;
       justify-content: space-around;
+      
+      width: 100%;
+      padding-left: 0;
   
       li {
         background: $Color-Tertiaire;
@@ -22,12 +40,18 @@ border: 2px $Color-Tertiaire solid;
         border-radius: 20px;
         cursor: pointer;
         opacity: 0.7;
-        
+        display: flex;
+        align-items: center;
+        justify-content: center;
         box-shadow: 3px 3px 1px rgba(51, 51, 51, 0.418);
   
         &:hover {
             opacity: 1;
         }
+        @include mobile-only {
+            width: 40%;
+            font-size:small;
+          }
       }
     }
     .active-btn {
@@ -67,9 +91,11 @@ border: 2px $Color-Tertiaire solid;
         &:hover {
             box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.5); 
         }
+
+       
     }
 
-    .btn-inscription{
+    .btn-inscription,  .btn-inscription-mobile{
         width: 50%;
         color : white;
         background-color: $Color-Tertiaire;
@@ -78,6 +104,21 @@ border: 2px $Color-Tertiaire solid;
         transition: 300ms;
         &:hover {
             box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.5); 
+        }
+    
+     
+    }
+    .btn-inscription {
+      
+        @include mobile-only {
+            display:none;
+        }
+    }
+    
+    .btn-inscription-mobile {
+        display: none;
+        @include mobile-only {
+            display:flex;
         }
     }
     
@@ -94,3 +135,4 @@ border: 2px $Color-Tertiaire solid;
 
 
   }
+}

@@ -8,7 +8,6 @@ const jwt = require('jsonwebtoken');
 exports.signup = (req, res, next) => {
 
    const signUpErrors = (errors) =>{
-        console.log('baleine');
         const error = { pseudo: "", email: "" };
 
   if (errors.message.includes("pseudo"))
@@ -17,19 +16,9 @@ exports.signup = (req, res, next) => {
   if (errors.message.includes("email")) 
   error.email = "Email invalide";
 
-  return error;}
+  return error;
+}
 
-  /*if (err.message.includes("password"))
-    errors.password = "Le mot de passe doit faire 6 caractères minimum";
-
-  if (err.code === 11000 && Object.keys(err.keyValue)[0].includes("pseudo"))
-    errors.pseudo = "Ce pseudo est déjà pris";
-
-  if (err.code === 11000 && Object.keys(err.keyValue)[0].includes("email"))
-    errors.email = "Cet email est déjà enregistré";
-    console.log(error);
-return error;
-}*/
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
     
@@ -51,22 +40,19 @@ exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email }, function(err, user) {
 
     if (err) { 
-        console.log('err login');
         return res.status(500).json({ err });
      }
 
     if (user) {
-        console.log('mdp login');
         bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                     if (!valid) {
-                        console.log('mdp login invalide');
                         return res.status(200).json({ error: 'Mot de passe ou identifiant incorrect !' });
                     } else {
                     res.status(200).json({
                         userId: user._id,
                         token: jwt.sign({ userId: user._id },
-                            process.env.KEY_JWT, { expiresIn: '12h' }
+                            process.env.KEY_JWT, { expiresIn: '24h' }
                         ),
                         pseudo:user.pseudo
                     });}

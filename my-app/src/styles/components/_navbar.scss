@@ -42,6 +42,12 @@ nav {
       }
       .user {
         justify-content : space-around;
+
+        h4 {
+          @include mobile-only {
+          font-size: small;
+          }
+        }
     }
       
       ul {

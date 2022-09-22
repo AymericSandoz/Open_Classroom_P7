@@ -25,7 +25,6 @@ exports.createPost = (req, res, next) => {
       
     
         else {
-            console.log('else de create post');
             var post = new Post({
                 
         description: req.body.description,
@@ -39,10 +38,11 @@ exports.createPost = (req, res, next) => {
     
         }
     
-    console.log(post);
         post.save()
             .then(() => { res.status(201).json({ message: 'post saved !' }) })
-            .catch(error => { console.log(error); })
+            .catch(error => {  res.status(404).json({
+                error: error
+            }); })
       
   })
   .catch((error) => {
@@ -53,14 +53,15 @@ exports.createPost = (req, res, next) => {
 
 };
 
+//Récupérer les posts 
 exports.getAllPosts = (req, res, next) => {
     Post.find((err, docs) => {
         if (!err) res.send(docs);
-        else console.log("Error to get data : " + err);
+        else res.send("Erreur :" + err);
     }).sort({ createdAt: -1 });
 };
 
-//ne marche pas 
+//Récupérer un post  
 exports.getOnePost = (req, res, next) => {
     Post.findOne({
         _id: req.params.id
@@ -78,7 +79,7 @@ exports.getOnePost = (req, res, next) => {
 };
 
 
-
+//Modifier un post 
 exports.modifyPost = (req, res, next) => {
     
 
@@ -90,19 +91,13 @@ exports.modifyPost = (req, res, next) => {
 
     delete postObject._userId;
     
-    console.log(`req.auth.userId`==`${process.env.REACT_APP_ADMIN_USER_ID}`)///=false HYYYYYYYYYYYYYYYY ???????????????????????????????????,
     
     const admin_user_id=`${process.env.REACT_APP_ADMIN_USER_ID}`;
     
     
     Post.findOne({ _id: req.params.id })
         .then((post) => {
-            console.log('requin');
-            console.log(req.auth.userId);
-            console.log(admin_user_id)
-    console.log((post.userId != req.auth.userId & req.auth.userId!=admin_user_id));
-    console.log( req.auth.userId!=admin_user_id);
-    console.log(post.userId != req.auth.userId)
+            
             if (post.userId != req.auth.userId & req.auth.userId!=admin_user_id) {
                 res.status(403).json({ message: ' unauthorized request' });
             } else {
@@ -112,12 +107,12 @@ exports.modifyPost = (req, res, next) => {
             }
         })
         .catch((error) => {
-            console.log(error);
-            res.status(400).json({ error });
+            res.status(500).json({ error });
         });
 };
 
 
+//Supprimer un post 
 exports.deletePost = (req, res, next) => {
     const admin_user_id=`${process.env.REACT_APP_ADMIN_USER_ID}`;
     Post.findOne({ _id: req.params.id })
@@ -152,14 +147,12 @@ exports.deletePost = (req, res, next) => {
 };
 
 
-
+//Liker un post 
 exports.likePost = (req, res) => {
-    console.log('Like fonction lancée');
-    console.log('req.params.id' + req.params.id)
 
     Post.findByIdAndUpdate(req.params.id, {
         $addToSet: { usersLiked: req.auth.userId },
-    }, { new: true },
+    }, { new: true },// `doc` is the document _after_ `update` was applied because of `new: true
         function (err, docs) {
             if (err) {
      
@@ -171,14 +164,13 @@ exports.likePost = (req, res) => {
         });
 };
 
+//Unliker un post 
 exports.unlikePost = (req, res) => {
-    console.log('Unlike fonction lancée');
     Post.findByIdAndUpdate(req.params.id, {
         $pull: { usersLiked: req.auth.userId },
     }, { new: true },
         function (err, docs) {
             if (err) {
-                console.log(err);
                 res.status(400).json(err);
             } else {
        
@@ -189,7 +181,7 @@ exports.unlikePost = (req, res) => {
 
 
 
-exports.dislikePost = (req, res) => {
+/*exports.dislikePost = (req, res) => {
 
     Post.findByIdAndUpdate(req.params.id, {
         $addToSet: { usersDisliked: req.auth.userId },
@@ -219,10 +211,10 @@ exports.undislikePost = (req, res) => {
                 res.send(docs);
             }
         });
-};
+};*/
 
+//Commenter un post 
 exports.commentPost = (req, res) => {
-    console.log('on entre dans comment post');
     User.findOne({ _id: req.auth.userId, })
     .then((user) => {
       const userEmail = user.email;
@@ -252,7 +244,7 @@ exports.commentPost = (req, res) => {
 });
 };
 
-
+//Modifier un com 
 exports.editCommentPost = (req, res) => {
     
     return Post.findById(req.params.id, (err, docs) => {
@@ -273,7 +265,7 @@ exports.editCommentPost = (req, res) => {
     });
 };
 
-exports.deleteCommentPost2 = (req, res) => {
+/*exports.deleteCommentPost2 = (req, res) => {
  
 
     
@@ -294,8 +286,9 @@ exports.deleteCommentPost2 = (req, res) => {
             else return res.status(400).send(err);
         }
     );}
-};
+};*/
 
+//SUpprimer un com 
 exports.deleteCommentPost = (req, res) => {
     const admin_user_id=`${process.env.REACT_APP_ADMIN_USER_ID}`;
     Post.findById(req.params.id, (err, docs) => {

@@ -40,7 +40,6 @@ const SignInForm = () => {
                 }
             })
             .catch((err) => {
-                console.log('lalallalalallallalalala');
                 console.log(err);
             });
     };

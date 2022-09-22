@@ -1,0 +1,19 @@
+/*RESPONSIVE : Mixines utilisées pour les media queries*/
+
+@mixin mobile-only {
+    @media screen and (max-width: map-get($breakpoints, mobile)) {
+        @content
+    }
+}
+
+@mixin tablette-only {
+    @media screen and (min-width: map-get($breakpoints, mobile)) and (max-width: map-get($breakpoints, tablette)) {
+        @content
+    }
+}
+
+@mixin desktop-only {
+    @media screen and (min-width: map-get($breakpoints, tablette)) {
+        @content
+    }
+}

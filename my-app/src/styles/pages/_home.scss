@@ -1,10 +1,14 @@
-#root {
+
  
-        background-color:  #eee;;
+      
        
     
 .main {
 margin : 0 10% 0 10%;
+
+@include mobile-only {
+    margin : 0 2% 0 2%;
+}
 .home-header {
 
     
@@ -32,7 +36,6 @@ p {
     margin : 0 auto;
     opacity: 0.5;
     font-weight:bold;
-}
 }
 }
 }

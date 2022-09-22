@@ -1,4 +1,6 @@
 @import './utils/variables.scss';
+@import './utils/mixines.scss';
+
 @import './components/navbar.scss';
 
 @import './components/NewPostForm.scss';
@@ -17,6 +19,3 @@
 
 @import './bases/bases.scss';
 @import './bases/normalize.scss';
-
-
-//@import './pages/essaie.scss';

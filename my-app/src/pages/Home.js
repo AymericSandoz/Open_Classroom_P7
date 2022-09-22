@@ -17,8 +17,7 @@ const Home = () => {
        
         
         const getPosts = async () => {
-    console.log('load Get post');
-    console.log(process.env.REACT_APP_SERVER_URL);
+    
             setLoadPost(true);
             await axios
                 .get(`${process.env.REACT_APP_SERVER_URL}api/post/`)
@@ -27,9 +26,8 @@ const Home = () => {
                     setPosts(res.data);
     
                     setLoadPost(false);
-                    console.log(res.data);
                 })
-                .catch((err) => console.log('requête axios de post actions ne fonctionne pas' + err));
+                .catch((err) => console.log('requête axios de getPosts ne fonctionne pas :' + err));
         };
         
     
@@ -45,12 +43,12 @@ const Home = () => {
                        
                         <div className="main">
                                 <div className="home-header">
-                                        {uid ? <NewPostForm getPosts={getPosts} /> : 
-                                        <NavLink exact to="/Connexion">
+                                        {uid ? (<NewPostForm getPosts={getPosts} /> ): 
+                                        (<NavLink exact to="/Connexion">
                                                 <div className="connexion-container">
                                         <p > Connectez vous pour ajouter un post ! </p>
                                         </div>
-                                    </NavLink> }
+                                    </NavLink> )}
                                 </div>
                                 <Thread posts={posts} getPosts={getPosts}/>
                         </div>

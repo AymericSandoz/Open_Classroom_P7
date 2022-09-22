@@ -1,4 +1,8 @@
+/*Variables liées aux couleurs*/
 $Color-Primaire : #FD2D01;
 $Color-Secondaire : #FFD7D7;
 $Color-Tertiaire : #4E5166;
 
+/*Variables liées aux breakpoints*/
+
+$breakpoints: ( "mobile":750px, "tablette":950px);

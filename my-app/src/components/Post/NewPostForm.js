@@ -80,6 +80,7 @@ const deleteImage = () => {
                     findLink.splice(i, 1);
                     setMessage(findLink.join(" "));
                     setPostPicture('');
+                    setFile("");
                 }
             }
         };
@@ -105,7 +106,7 @@ const deleteImage = () => {
                     <iframe
                         src={video}
                         frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        //allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                         title={video}
                     ></iframe>)}

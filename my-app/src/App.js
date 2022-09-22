@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 //Objectif : stocker ID pour vérifier à chaque fois si notre utilisateurs est connecté ou pas. 
-//Le problème est que je veux récupérer token(donc faire une requete get) mais je dois
+
 const App = () => {
     const [uid, setUid] = useState(null);
 
@@ -23,7 +23,7 @@ const App = () => {
                 //withCredentials: true,
             })
                 .then((res) => {//QUESTION MENTOR POURQUOI ça ne marche pas ? 
-                    console.log('requin' + res.data);
+                    console.log('requin' );
                     setUid(res.data);
                 })
                 .catch((err) => console.log("No token   333"));

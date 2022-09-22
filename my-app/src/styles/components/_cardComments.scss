@@ -24,6 +24,7 @@ transition : 400ms;
 
     .comment-header {
         display: flex;
+        justify-content: space-between;
         grid-row: 1;
         grid-column: 1/4;
         border-radius:  5px 5px 0 0;
@@ -44,7 +45,7 @@ transition : 400ms;
     display: flex;
     text-align: center;
     align-self: center;
-    margin-left: 50%;
+    margin-right: 20px;
 }
 
     }

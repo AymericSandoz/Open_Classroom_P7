@@ -23,10 +23,8 @@ const [counterLike,setCounterLike]=useState(post.usersLiked.length);
             headers: { "authorization": `Bearer ${localStorage.getItem('token')}` }
         })
             .then((res) => {
-                console.log('likePost !!');
                 setForceLike(true);
-                setLiked(true);//Ne MARCHE PAS
-                console.log('liked :   !!' + liked);
+                setLiked(true);
                 setCounterLike(counterLike+1);
             })
             .catch((err) => console.log(err));
@@ -43,10 +41,8 @@ const [counterLike,setCounterLike]=useState(post.usersLiked.length);
 
         })
             .then((res) => {
-                console.log('unlike post !!');
                 setForceLike(true);
-                setLiked(false);////////NE MARCHE PAS 
-                console.log('liked : ' + liked);
+                setLiked(false);
                 setCounterLike(counterLike-1);
               
             })
