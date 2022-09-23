@@ -32,12 +32,12 @@ const SignUpForm = (props) => {
         
        if (res.data.pseudo=="" && res.data.email=="" ) {
       
-        
+        props.registerActionDone();
         setFormSubmit(true);
         
         } 
         else if (res.data.message=="Utilisateur créé !"){
-  
+          props.registerActionDone();
          setFormSubmit(true);
           
         }
@@ -56,11 +56,15 @@ const SignUpForm = (props) => {
   };
 
   useEffect(() => {
+if (password.length >0) {
     if (password.length > passwordMinimunLengthSecurity){
       setPasswordError("");
     }
-    else  {
+    else {
       setPasswordError(`Le mot de passe doit contenir plus de ${passwordMinimunLengthSecurity} caractères`);
+    }}
+    else {
+      setPasswordError(``);
     }
   }, [password]);
   
@@ -105,6 +109,7 @@ const SignUpForm = (props) => {
             name="password"
             id="password"
             onChange={(e) => setPassword(e.target.value)}
+          
             value={password}
           />
           <br />

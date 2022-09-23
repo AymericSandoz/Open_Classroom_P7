@@ -22,6 +22,11 @@ const Log = (props) => {
             setSignInModal(true);
         }
     };
+
+    const registerActionDone =() => {
+        setSignUpModal(false);
+            setSignInModal(true);
+    }
     return (
         <div className="connection-form">
             <div className="form-container">
@@ -42,7 +47,7 @@ const Log = (props) => {
                         Se connecter
                     </li>
                 </ul>
-                {signUpModal && <SignUpForm />}
+                {signUpModal && <SignUpForm registerActionDone={registerActionDone} />}
                 {signInModal && <SignInForm />}
 
 

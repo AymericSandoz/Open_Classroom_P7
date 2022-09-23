@@ -62,13 +62,10 @@ const [counterLike,setCounterLike]=useState(post.usersLiked.length);
     return (<div className="like-container">
         {liked}
         {uid === null && (
-            <Popup
-                trigger={<FaHeart />}
-                position={["bottom center", "bottom right", "bottom left"]}
-                closeOnDocumentClick
-            >
-                <div>Connectez-vous pour aimer un post !</div>
-            </Popup>)}
+           <div> 
+           <FaRegHeart />
+{counterLike}
+</div>)}
         {uid && liked === false && (
             <div className = 'LikeButton'> 
             <FaRegHeart onClick={() => likePost(post._id)} />
