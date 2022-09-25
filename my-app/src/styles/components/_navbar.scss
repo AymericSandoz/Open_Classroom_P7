@@ -1,70 +1,75 @@
 nav {
   display: flex;
-   justify-content: center;
+  justify-content: center;
+  width: 100%;
+  height: 45px;
+  border-radius: 6px;
+  padding: 0 3% 0 3%;
+  z-index: 10;
+  top: 0;
+  margin-bottom: 55px;
+
+  position: sticky;
+  background-color: $Color-Secondaire;
+  border: 2px solid $Color-Tertiaire;
+
+
+
+  .nav-container {
+    display: flex;
     width: 100%;
+    max-width: 1190px;
+    margin: 0 auto;
+    justify-content: space-between;
     height: 45px;
-    border-radius: 6px;
-    padding: 0 3% 0 3%;
-    z-index: 10;
-    top: 0;
-    margin-bottom: 55px;
+    align-items: center;
 
-   position : sticky;
-    background-color: $Color-Secondaire;
-    border: 2px solid $Color-Tertiaire;
-  
-   
-  
-    .nav-container {
-      display: flex;
-      width: 100%;
-      max-width: 1190px;
-      margin: 0 auto;
-      justify-content: space-between;
-      height: 45px;
-      align-items: center;
-      a,li{
-        color :$Color-Tertiaire;
-        cursor: pointer;
-      }
-
-      a:hover, li:hover {
-        color: $Color-Primaire;
-      }
-      .logo {
-        //display: flex;
-        //align-items: center;
-       
-        img {
-          height: 150px;
-          width: 150px;
-        }
-      }
-      .user {
-        justify-content : space-around;
-
-        h4 {
-          @include mobile-only {
-          font-size: small;
-          }
-        }
+    a,
+    li {
+      color: $Color-Tertiaire;
+      cursor: pointer;
     }
-      
-      ul {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 55%;
-        justify-content: space-between;
-        font-size: 1.2rem;
-        
-     
-        
-        li {
-            list-style-type:none;
-          
-        }
-        
+
+    a:hover,
+    li:hover {
+      color: $Color-Primaire;
+    }
+
+    .logo {
+      //display: flex;
+      //align-items: center;
+
+      img {
+        height: 150px;
+        width: 150px;
       }
+    }
+
+    .user {
+      justify-content: space-around;
+
+      h4 {
+        @include mobile-only {
+          font-size: small;
+        }
+      }
+    }
+
+    ul {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 55%;
+      justify-content: space-between;
+      font-size: 1.2rem;
+
+
+
+      li {
+        list-style-type: none;
+
+      }
+
     }
   }
+}

@@ -1,21 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
 
-a{
-    text-decoration: none;
-    color : black;
-  }
-  textarea:focus {
-    outline: 3px solid $Color-Tertiaire;
-    }
-  
-    *{
-      list-style-type: none;
-      box-sizing: border-box;
-      font-family: Lato;
-      margin:0;
-      
-    }
+a {
+  text-decoration: none;
+  color: black;
+}
 
-    html {
-      background-color:  #eee;
-    }
+textarea:focus {
+  outline: 3px solid $Color-Tertiaire;
+}
+
+* {
+  list-style-type: none;
+  box-sizing: border-box;
+  font-family: Lato;
+  margin: 0;
+
+}
+
+html {
+  background-color: #eee;
+}

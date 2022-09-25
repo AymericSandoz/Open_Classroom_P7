@@ -83,18 +83,45 @@ exports.getOnePost = (req, res, next) => {
 exports.modifyPost = (req, res, next) => {
     
 
-
     const postObject = req.file ? {
         ...req.body,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body };
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        video:""
+    } : { ...req.body, imageUrl:''};
 
-    delete postObject._userId;
     
+    if (req.body.video==undefined) {
+        postObject.video='';
+    }
+
     
     const admin_user_id=`${process.env.REACT_APP_ADMIN_USER_ID}`;
+      //////supprimer l'image 
+ if (req.file == undefined) {
+        Post.findOne({ _id: req.params.id })
+        .then(post => {
+            if (post.userId != req.auth.userId & req.auth.userId!=admin_user_id) {
+                res.status(403).json({ message: ' unauthorized request' });
+            } else {
+        const filename = post.imageUrl.split('/images/')[1];
+               console.log(filename);
+               fs.unlink(`images/${filename}`, (err) => {
+                if (err) {
+                    console.log("failed to delete local image:"+err);
+                } else {
+                    console.log('successfully deleted local image');                                
+                }
+        });
+                    
+    }}).catch(error => {
+        res.status(500).json({ error });
+    });} 
+ 
+   
+
+
     
-    
+////modifier le post
     Post.findOne({ _id: req.params.id })
         .then((post) => {
             
@@ -122,13 +149,13 @@ exports.deletePost = (req, res, next) => {
             } else {
            
 
-                if (post.imageUrl === undefined) {
+                /*if (post.imageUrl === undefined) {
                     Post.deleteOne({ _id: req.params.id })
                         .then(() => { res.status(200).json({ message: 'Object deleted !' }) })
                         .catch(error => res.status(401).json({ error }));
-                }
+                }*/
 
-                else {
+              
                     const filename = post.imageUrl.split('/images/')[1];
                
                     fs.unlink(`images/${filename}`, () => {
@@ -137,7 +164,7 @@ exports.deletePost = (req, res, next) => {
                             .catch(error => res.status(401).json({ error }));
 
                     });
-                }
+                
             }
         })
 
