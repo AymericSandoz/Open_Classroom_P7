@@ -1,13 +1,7 @@
-import React from 'react';
+import React from "react";
 import { useState } from "react";
 import SignInForm from "./signInForm";
 import SignUpForm from "./signUpForm";
-
-
-
-
-
-
 
 const Log = (props) => {
     const [signUpModal, setSignUpModal] = useState(props.signup);
@@ -23,15 +17,14 @@ const Log = (props) => {
         }
     };
 
-    const registerActionDone =() => {
+    const registerActionDone = () => {
         setSignUpModal(false);
-            setSignInModal(true);
-    }
+        setSignInModal(true);
+    };
     return (
         <div className="connection-form">
             <div className="form-container">
                 <ul>
-
                     <li
                         onClick={handleModals}
                         id="register"
@@ -47,12 +40,10 @@ const Log = (props) => {
                         Se connecter
                     </li>
                 </ul>
-                {signUpModal && <SignUpForm registerActionDone={registerActionDone} />}
+                {signUpModal && (
+                    <SignUpForm registerActionDone={registerActionDone} />
+                )}
                 {signInModal && <SignInForm />}
-
-
-            
-
             </div>
         </div>
     );

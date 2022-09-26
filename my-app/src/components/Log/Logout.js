@@ -1,19 +1,16 @@
 import React from "react";
-import {FaUsersSlash} from 'react-icons/fa';
+import { FaUsersSlash } from "react-icons/fa";
 const Logout = () => {
     const clearToken = () => {
         if (window.confirm("Voulez-vous vous déconnectez ?")) {
             localStorage.clear();
-        window.location = '/Connexion';
+            window.location = "/Connexion";
         }
-        
     };
-
-
 
     return (
         <li onClick={clearToken}>
-            <FaUsersSlash/>
+            <FaUsersSlash />
         </li>
     );
 };

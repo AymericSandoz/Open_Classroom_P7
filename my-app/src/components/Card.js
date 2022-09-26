@@ -26,17 +26,30 @@ const Card = ({ post, reloadPosts }) => {
     const [postPicture, setPostPicture] = useState(post.imageUrl);
     const [file, setFile] = useState();
     const fileInput = useRef(null);
+    const [imgHasBeenDeleted, setImgHasBeenDeleted] = useState(false);
     const [video, setVideo] = useState(post.video);
     const uid = useContext(UidContext);
+
     //const textareaRef = useRef(null);
     //const MIN_TEXTAREA_HEIGHT = 32;
 
     const updatePost = async (postId) => {
         const data = new FormData();
-        data.append("description", textUpdate);
-        if (file) data.append("image", file);
 
-        if (video) data.append("video", video);
+        ////Permet d'envoyer l'image selon que l'utilisateur ai ou nom supprimer l'image.
+        data.append("description", textUpdate);
+        if (file) {
+            data.append("image", file);
+        } else {
+            console.log(!imgHasBeenDeleted);
+            if (!imgHasBeenDeleted) {
+                data.append("imageUrl", post.imageUrl);
+            } else {
+                data.append("imageUrl", "");
+            }
+        }
+
+        data.append("video", video);
         await axios({
             method: "put",
             url: `${process.env.REACT_APP_SERVER_URL}api/post/${postId}`,
@@ -59,12 +72,14 @@ const Card = ({ post, reloadPosts }) => {
     const updatePicture = (e) => {
         setPostPicture(URL.createObjectURL(e.target.files[0])); //Visualiser l'image
         setFile(e.target.files[0]);
+        setImgHasBeenDeleted(false);
     };
     const deleteImage = () => {
         setPostPicture("");
         console.log(file);
         setFile("");
         console.log(file);
+        setImgHasBeenDeleted(true);
     };
 
     useEffect(() => {
@@ -84,10 +99,9 @@ const Card = ({ post, reloadPosts }) => {
                             'embed.split("&")[0];;',
                             embed.split("&")[0]
                         );
-                        console.log("video;;", video);
-                        console.log("video;;", textUpdate);
                         setPostPicture("");
                         setFile("");
+                        setImgHasBeenDeleted(true);
                     }
                 }
             };

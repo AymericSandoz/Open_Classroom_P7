@@ -1,28 +1,4 @@
-const jwt = require('jsonwebtoken');
-
-
-/*module.exports = (req, res, next) => {
-    //console.log('otken ou pas ? ' + req.headers.authorization.split(' ')[1]);
-    console.log('otken ou pas ? ' + req);
-    const token = 'lalalalllllllllllllaallalalallalalalaallaalaa';
-    console.log('otken ou pas ? ' + token);
-    if (token) {
-        console.log('alllez la ? ' + token);
-        jwt.verify(token, 'rbircrihruihruidrnhr', async (err, decodedToken) => {
-            if (err) {
-                console.log(err);
-                res.send(200).json('no token');
-            } else {
-                console.log(decodedToken.userId);
-                res.send(200).json(decodedToken.userId);
-                next();
-            }
-        });
-    } else {
-        console.log('No token');
-    }
-};*/
-
+const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
     const token = req.body.token;
@@ -30,15 +6,13 @@ module.exports = (req, res, next) => {
     if (token) {
         jwt.verify(token, process.env.KEY_JWT, async (err, decodedToken) => {
             if (err) {
-                console.log(err);
-                res.status(200).json('no token(verify ne fonctionne pas)');
+                res.status(200).json(err);
             } else {
-                console.log(decodedToken.userId);
                 res.status(200).json(decodedToken.userId);
                 next();
             }
         });
     } else {
-        console.log('No token(else)');
+        console.log("No token");
     }
 };
