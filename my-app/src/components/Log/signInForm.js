@@ -9,20 +9,16 @@ const SignInForm = () => {
 
     const HandleLogin = (e) => {
         e.preventDefault();
-        //const [emailError,setEmailError] = document.querySelector(".email.error");
-        //const [passwordError,setPasswordError] = document.querySelector(".password.error");
 
         axios({
             method: "post",
             url: `${process.env.REACT_APP_SERVER_URL}api/user/login`,
-            //withCredentials: true,   !!!marche pas
             data: {
                 email: email,
                 password: password
             }
         })
             .then((res) => {
-                /////marche pas, on va directement dans le catch. QUESTION MENTOR
                 console.log("res data error : " + res.data.error);
 
                 if (res.data.error) {

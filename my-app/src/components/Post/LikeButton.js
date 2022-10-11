@@ -7,7 +7,7 @@ import { FaRegHeart } from "react-icons/fa";
 const LikeButton = ({ post }) => {
     const [liked, setLiked] = useState(false);
     const uid = useContext(UidContext);
-    const [forceLike, setForceLike] = useState(false);
+    const [forceLike, setForceLike] = useState(false); //initialisation du like
 
     const [counterLike, setCounterLike] = useState(post.usersLiked.length);
 
@@ -46,7 +46,11 @@ const LikeButton = ({ post }) => {
     };
 
     useEffect(() => {
-        if (post.usersLiked.includes(uid) && !forceLike) setLiked(true);
+        if (post.usersLiked.includes(uid) && !forceLike) {
+            setLiked(true);
+        }
+        console.log(liked);
+        console.log(forceLike);
     }, [uid, post.usersLiked, liked]);
 
     return (

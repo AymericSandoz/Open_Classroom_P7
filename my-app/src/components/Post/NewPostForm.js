@@ -39,7 +39,6 @@ const NewPostForm = ({ getPosts }) => {
     };
 
     const handlePicture = (e) => {
-        console.log("gogogo handle picture:" + e.target.files);
         setPostPicture(URL.createObjectURL(e.target.files[0])); //Visualiser l'image
         setFile(e.target.files[0]);
         setVideo("");
