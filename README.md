@@ -14,7 +14,7 @@ Node Js, Mongoose, express, multer.
 
 ## Initialisation du projet
 
-- Clonez le repo;
+- Clonez le repo
 - Run npm install
 
 
