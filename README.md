@@ -4,7 +4,8 @@
 Le projet consiste à construire un réseau social interne pour les employés de Groupomania.
 
 Le projet est codé en JavaScript et respecte les standards WCAG ;
-Utilisation du framework react côté front-end JavaScript;
+Utilisation du framework React côté front-end JavaScript;
+Utilisation de NodeJS côté back-end;
 Utilisation de MongoDB comme base de données;
 
 ## Prerequis
